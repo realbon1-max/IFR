@@ -1,7 +1,7 @@
 # One-off: fetch outlines of Japan's main lakes from OpenStreetMap (Overpass API), simplify them and write lakes.js
 # (window.JPLAKES = [{n: name, c: [[ [lon,lat], ... ]]}]). Data © OpenStreetMap contributors (ODbL).
 import json, math, sys, time, urllib.request, urllib.parse
-NAMES = """琵琶湖 猪苗代湖 田沢湖 十和田湖 霞ヶ浦 西浦 北浦 浜名湖 宍道湖 中海 諏訪湖 洞爺湖 支笏湖 屈斜路湖 阿寒湖 摩周湖 サロマ湖 能取湖 風蓮湖 網走湖 濤沸湖
+NAMES = """琵琶湖 霞.浦.* 八郎潟.* 猪苗代湖 田沢湖 十和田湖 霞ヶ浦 西浦 北浦 浜名湖 宍道湖 中海 諏訪湖 洞爺湖 支笏湖 屈斜路湖 阿寒湖 摩周湖 サロマ湖 能取湖 風蓮湖 網走湖 濤沸湖
 小川原湖 十三湖 八郎湖 中禅寺湖 河口湖 山中湖 本栖湖 西湖 精進湖 芦ノ湖 印旛沼 手賀沼 野尻湖 木崎湖 青木湖 奥只見湖 田子倉湖 池田湖 湖山池 東郷池 北潟湖 三方湖 水月湖 久美浜湾 加茂湖 福島潟 鳥屋野潟 檜原湖 秋元湖 小野川湖 沼沢湖 宇曽利山湖 大沼 クッチャロ湖 朱鞠内湖 金山湖 かなやま湖 大雪湖 シューパロ湖 早明浦ダム 黒部湖 御母衣湖 奈良井ダム 丹沢湖 相模湖 津久井湖 奥多摩湖 榛名湖 赤城大沼 丸沼 菅沼 湯ノ湖 佐鳴湖 一碧湖""".split()
 RX = '^(' + '|'.join(NAMES) + ')$'
 Q = f'[out:json][timeout:240][bbox:24,122,46,146];(way["natural"="water"]["name"~"{RX}"];relation["natural"="water"]["name"~"{RX}"];way["water"="reservoir"]["name"~"{RX}"];relation["water"="reservoir"]["name"~"{RX}"];);out geom;'
