@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja" data-theme="simple">
+<html lang="ja" data-theme="ace">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -15,7 +15,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&family=IBM+Plex+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&family=Saira+Condensed:wght@500;600;700&family=IBM+Plex+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --paper:#E9EFF3;--card:#FFFFFF;--ink:#13293D;--muted:#566B7D;--line:#C3CFD8;
@@ -630,6 +630,103 @@ html[data-theme="tac"] ::-webkit-scrollbar-track { background: #000; border-left
 html[data-theme="tac"] ::-webkit-scrollbar-thumb { background: var(--muted); }
 html[data-theme="tac"] ::-webkit-scrollbar-thumb:hover { background: var(--ink); }
 /* TACTICAL UI END */
+/* === ACE THEME（ファイター・パイロット風／オリジナル） === */
+:root[data-theme="ace"]{
+  --paper:#070E1A;--card:#0F1C2E;--ink:#E9EEF4;--muted:#8C9DB2;--line:#22385A;
+  --mag:#FF8A1F;--mag-soft:#3A220C;--go:#3FD17F;--go-soft:#0E3122;--cau:#F2C14E;--cau-soft:#382D10;
+  --no:#FF4B3E;--no-soft:#3E1512;--sky:#5EC8FF;--sea:#0A1A2C;--land:#18263A;--coast:#3B5677;
+  --gold:#F2C14E;--burn:#FF8A1F;--hud:#5EC8FF;
+  --code:'B612','IBM Plex Sans JP',system-ui,sans-serif;
+  --head:'Saira Condensed','Oswald','IBM Plex Sans JP',system-ui,sans-serif;
+  --body:'IBM Plex Sans JP','Hiragino Sans','Noto Sans JP',system-ui,sans-serif;
+  color-scheme:dark}
+html[data-theme="ace"] body{
+  background:
+    radial-gradient(1200px 500px at 50% -180px,rgba(255,138,31,.18),transparent 60%),
+    repeating-linear-gradient(0deg,rgba(94,200,255,.035) 0 1px,transparent 1px 40px),
+    repeating-linear-gradient(90deg,rgba(94,200,255,.035) 0 1px,transparent 1px 40px),
+    linear-gradient(180deg,#0B1628 0%,#070E1A 420px);
+  background-attachment:fixed;color:var(--ink)}
+html[data-theme="ace"] h1,html[data-theme="ace"] h2,html[data-theme="ace"] h3{font-family:var(--head);letter-spacing:.06em;text-transform:uppercase}
+html[data-theme="ace"] h2{font-size:20px;color:#fff;display:flex;align-items:center;gap:10px}
+html[data-theme="ace"] h2::before{content:"";width:18px;height:10px;flex:0 0 auto;
+  background:linear-gradient(135deg,transparent 0 30%,var(--burn) 30% 50%,transparent 50% 65%,var(--burn) 65% 85%,transparent 85%);}
+html[data-theme="ace"] h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+html[data-theme="ace"] h3{color:var(--gold);font-size:15px}
+/* ヘッダー */
+html[data-theme="ace"] header.top{position:relative;padding:12px 14px 12px 16px;
+  background:linear-gradient(100deg,rgba(15,28,46,.95) 0%,rgba(15,28,46,.75) 70%,rgba(255,138,31,.10) 100%);
+  border:1px solid var(--line);border-left:4px solid var(--burn);
+  clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,0 100%)}
+html[data-theme="ace"] header.top::after{content:"";position:absolute;right:0;bottom:0;width:120px;height:6px;
+  background:repeating-linear-gradient(135deg,var(--gold) 0 8px,transparent 8px 16px);opacity:.7}
+html[data-theme="ace"] header.top h1{font-size:28px;font-weight:700;line-height:1.05;color:#fff;
+  display:flex;align-items:center;gap:10px;text-shadow:0 0 18px rgba(255,138,31,.35)}
+html[data-theme="ace"] header.top h1::before{content:"";width:46px;height:22px;flex:0 0 auto;background:center/contain no-repeat
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 92 44'%3E%3Cg fill='%23F2C14E'%3E%3Cpath d='M46 4 52 16 46 40 40 16Z'/%3E%3Cpath d='M41 18 2 10 6 16 30 22 4 20 9 26 38 27Z'/%3E%3Cpath d='M51 18 90 10 86 16 62 22 88 20 83 26 54 27Z'/%3E%3C/g%3E%3Ccircle cx='46' cy='18' r='4' fill='%23FF8A1F'/%3E%3C/svg%3E")}
+html[data-theme="ace"] .airac{font-family:var(--code);letter-spacing:.08em;text-transform:uppercase;color:var(--hud)}
+html[data-theme="ace"] .airac b{color:var(--gold)}
+/* タブ */
+html[data-theme="ace"] nav.steps{background:rgba(7,14,26,.92);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);gap:2px;padding:6px 0 0}
+html[data-theme="ace"] nav.steps button{font-family:var(--head);letter-spacing:.08em;font-weight:600;color:var(--muted);
+  background:linear-gradient(180deg,#12223A,#0C1828);border:1px solid var(--line);border-bottom:none;
+  clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);padding-left:16px;padding-right:16px}
+html[data-theme="ace"] nav.steps button[aria-selected="true"]{color:#0A0F18;
+  background:linear-gradient(180deg,#FFB061,var(--burn));border-color:var(--burn);
+  box-shadow:0 0 18px rgba(255,138,31,.55)}
+html[data-theme="ace"] nav.steps button[aria-selected="true"] svg{color:#0A0F18;stroke:#0A0F18}
+/* カード：HUDブラケット */
+html[data-theme="ace"] .box,html[data-theme="ace"] .stat,html[data-theme="ace"] .scard,html[data-theme="ace"] .fstep,
+html[data-theme="ace"] .wxcard,html[data-theme="ace"] .appr,html[data-theme="ace"] .sidc{
+  position:relative;background:linear-gradient(180deg,rgba(18,34,56,.96),rgba(12,24,40,.96));
+  border:1px solid var(--line);border-radius:0;box-shadow:0 10px 26px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.04)}
+html[data-theme="ace"] .box{
+  background-image:
+    linear-gradient(var(--hud),var(--hud)),linear-gradient(var(--hud),var(--hud)),
+    linear-gradient(var(--hud),var(--hud)),linear-gradient(var(--hud),var(--hud)),
+    linear-gradient(180deg,rgba(18,34,56,.96),rgba(12,24,40,.96));
+  background-size:14px 2px,2px 14px,14px 2px,2px 14px,100% 100%;
+  background-position:0 0,0 0,100% 100%,100% 100%,0 0;background-repeat:no-repeat}
+html[data-theme="ace"] .stat{border-top:3px solid var(--burn)}
+html[data-theme="ace"] .stat .v{color:#fff;text-shadow:0 0 10px rgba(94,200,255,.35)}
+html[data-theme="ace"] .stat .k{font-family:var(--head);letter-spacing:.08em;text-transform:uppercase}
+/* ストリップ */
+html[data-theme="ace"] .leg{background:linear-gradient(180deg,#132641,#0D1A2C);border:1px solid var(--line);border-top:3px solid var(--hud)}
+html[data-theme="ace"] .leg:first-child{border-top-color:var(--go)}
+html[data-theme="ace"] .leg.alt{border-top:3px dashed var(--cau)}
+html[data-theme="ace"] .leg .icao{font-family:var(--head);font-size:34px;letter-spacing:.06em;color:#fff;text-shadow:0 0 12px rgba(94,200,255,.4)}
+html[data-theme="ace"] .leg .role{font-family:var(--head);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+html[data-theme="ace"] .arrow{color:var(--burn)}
+/* 入力・ボタン */
+html[data-theme="ace"] input,html[data-theme="ace"] select,html[data-theme="ace"] textarea{
+  background:#081322 !important;color:#fff !important;border:1px solid #2B4469 !important;border-radius:0 !important;
+  font-family:var(--code)}
+html[data-theme="ace"] input:focus,html[data-theme="ace"] select:focus,html[data-theme="ace"] textarea:focus{
+  outline:none;border-color:var(--hud) !important;box-shadow:0 0 0 2px rgba(94,200,255,.25)}
+html[data-theme="ace"] button.act{font-family:var(--head);letter-spacing:.1em;text-transform:uppercase;font-weight:700;
+  color:#0A0F18;background:linear-gradient(180deg,#FFB061,var(--burn));border:none;border-radius:0;
+  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);padding:10px 20px;box-shadow:0 0 14px rgba(255,138,31,.45)}
+html[data-theme="ace"] button.act:active{filter:brightness(1.15)}
+html[data-theme="ace"] button.sub{font-family:var(--head);letter-spacing:.06em;color:var(--hud);background:rgba(94,200,255,.06);
+  border:1px solid #2B4469;border-radius:0;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);padding-left:14px;padding-right:14px}
+html[data-theme="ace"] .chip{border-radius:0 !important;background:rgba(242,193,78,.12) !important;color:var(--gold) !important;border:1px solid rgba(242,193,78,.4) !important}
+html[data-theme="ace"] .tgl input[type="checkbox"]:checked{accent-color:var(--burn)}
+html[data-theme="ace"] input[type="checkbox"],html[data-theme="ace"] input[type="radio"]{accent-color:var(--burn)}
+/* 表・地図 */
+html[data-theme="ace"] th{color:var(--gold);font-family:var(--head);letter-spacing:.06em}
+html[data-theme="ace"] .map,html[data-theme="ace"] .tl{border:1px solid var(--line);border-radius:0;background:#0A1A2C}
+html[data-theme="ace"] a{color:var(--hud)}
+html[data-theme="ace"] ::-webkit-scrollbar{width:8px;height:8px}
+html[data-theme="ace"] ::-webkit-scrollbar-track{background:#081322}
+html[data-theme="ace"] ::-webkit-scrollbar-thumb{background:#2B4469}
+html[data-theme="ace"] ::selection{background:var(--burn);color:#000}
+html[data-theme="ace"] a.act{display:inline-block;text-decoration:none;font-family:var(--head);letter-spacing:.1em;font-weight:700;
+  color:#0A0F18 !important;background:linear-gradient(180deg,#FFB061,var(--burn)) !important;border:none;border-radius:0;
+  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);padding:10px 20px;box-shadow:0 0 14px rgba(255,138,31,.45)}
+html[data-theme="ace"] ol.steps3>li::before{background:var(--burn) !important;color:#0A0F18 !important;border-color:var(--burn) !important;font-family:var(--head)}
+/* ACE THEME END */
+
 </style>
 </head>
 <body>
@@ -2987,9 +3084,9 @@ function bind(){
     S.route=structuredClone(DEF.route);S.proc={};S.plView={};S._selAw=null;S._selFx=null;S._selDr=null;S.fpl.lvl='';S.chk={};if(typeof MAP!=='undefined')MAP=null;if(typeof SUG!=='undefined')SUG=null;save();
     ['dep','dst','alt','talt'].forEach(k=>{const el=$(k);if(el)el.value='';const s=$(k+'_s');if(s)s.value=''});try{renderVia()}catch(e){}if($('rteIn'))$('rteIn').value='';
     S.tab='route';save();location.reload()}}
-  const THN={simple:'シンプル',light:'クラシック',dark:'ダーク',tac:'タクティカル'};const thLab=()=>{const t=document.documentElement.dataset.theme||'simple';$('themeBtn').textContent='表示：'+(THN[t]||t)};
-  $('themeBtn').onclick=()=>{const r=document.documentElement;const cur=r.dataset.theme||'simple';r.dataset.theme={simple:'light',light:'dark',dark:'tac',tac:'simple'}[cur]||'simple';try{localStorage.setItem('ifrtheme',r.dataset.theme)}catch(e){}thLab();try{renderAll()}catch(e){}};
-  try{const th=localStorage.getItem('ifrtheme');document.documentElement.dataset.theme=th||'simple'}catch(e){document.documentElement.dataset.theme='simple'}thLab();
+  const THN={ace:'ファイター',simple:'シンプル',light:'クラシック',dark:'ダーク',tac:'タクティカル'};const thLab=()=>{const t=document.documentElement.dataset.theme||'ace';$('themeBtn').textContent='表示：'+(THN[t]||t)};
+  $('themeBtn').onclick=()=>{const r=document.documentElement;const cur=r.dataset.theme||'ace';r.dataset.theme={ace:'simple',simple:'light',light:'dark',dark:'tac',tac:'ace'}[cur]||'ace';try{localStorage.setItem('ifrtheme',r.dataset.theme)}catch(e){}thLab();try{renderAll()}catch(e){}};
+  try{let th=localStorage.getItem('ifrtheme');if(!localStorage.getItem('ifrace1')){th='ace';localStorage.setItem('ifrace1','1');localStorage.setItem('ifrtheme','ace')}document.documentElement.dataset.theme=th||'ace'}catch(e){document.documentElement.dataset.theme='ace'}thLab();
   renderVia();
 }
 function renderVia(){$('viaList').innerHTML=S.route.via.map((v,k)=>`<span class="chip">${esc(v)}<button type="button" aria-label="${esc(v)}を削除" data-k="${k}">×</button></span>`).join('');
