@@ -1,0 +1,19 @@
+# AIRAC reminder: 14 days before each AIP effective date (28-day cycle), open an issue so the owner gets notified.
+name: AIRAC reminder
+on:
+  schedule: [{ cron: '17 0 * * *' }]
+  workflow_dispatch:
+permissions: { issues: write }
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - env: { GH_TOKEN: '${{ github.token }}', REPO: '${{ github.repository }}' }
+        run: |
+          read eff left <<< $(python3 -c "
+          import datetime as D;b=D.date(2026,10,29);t=D.date.today();n=(t-b).days//28+1;e=b+D.timedelta(days=28*n);print(e.isoformat(),(e-t).days)")
+          echo "next AIRAC $eff in $left days"
+          [ "$left" -le 14 ] || exit 0
+          t="AIP更新のお知らせ：AIRAC $eff"
+          gh issue list -R "$REPO" --state all --search "$t in:title" --json title -q '.[].title' | grep -qF "$t" && exit 0
+          gh issue create -R "$REPO" --title "$t" --body "$(printf '次のAIP（AIRAC %s 有効）が近づいています（あと%s日）。\n\n1. AIS JapanからAIPのzip（AD 2）をダウンロード\n2. GitHubの Actions →「AIP update」→「Run workflow」に、zipのURL（Googleドライブの共有リンクなど）を入れて実行\n   （またはリポジトリの aip-inbox フォルダにzipを置く。25MBを超えるzipはURLの方法を使ってください）\n3. 数十分で、変更点の一覧つきのプルリクエストができます。確認して「Merge」すると、アプリに反映されます。' "$eff" "$left")"

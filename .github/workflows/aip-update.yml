@@ -1,0 +1,71 @@
+# AIP Japan update: download the AIP zip (AD 2 PDFs), rebuild procedure data + changed chart images,
+# and open a pull request with a change report. Merge the PR to publish.
+name: AIP update
+on:
+  workflow_dispatch:
+    inputs:
+      zip_url:
+        description: 'AIPのzipのURL（Googleドライブの共有リンク等）。空なら aip-inbox/ に置いたzipを使う'
+        required: false
+      airac:
+        description: '有効日 AIRAC（YYYY-MM-DD）。空なら次の切替日を自動計算'
+        required: false
+  push:
+    paths: ['aip-inbox/*.zip']
+permissions:
+  contents: write
+  pull-requests: write
+concurrency: { group: aip, cancel-in-progress: false }
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+        with: { lfs: true }
+      - name: Tools
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils unzip > /dev/null
+          pip install -q pdfplumber pillow gdown
+      - name: Get the AIP zip
+        env: { ZIP_URL: '${{ github.event.inputs.zip_url }}' }
+        run: |
+          mkdir -p "$RUNNER_TEMP/aip"; cd "$RUNNER_TEMP/aip"
+          if [ -n "$ZIP_URL" ]; then
+            if echo "$ZIP_URL" | grep -q 'drive.google.com'; then gdown --fuzzy -q -O aip.zip "$ZIP_URL"; else curl -fsSL -o aip.zip "$ZIP_URL"; fi
+          else
+            f=$(ls -t "$GITHUB_WORKSPACE"/aip-inbox/*.zip 2>/dev/null | head -1); [ -n "$f" ] || { echo "zip がありません"; exit 1; }; cp "$f" aip.zip
+          fi
+          unzip -q -o aip.zip -d x; find x -name '*.zip' -exec unzip -q -o {} -d x \; || true
+          root=$(python3 - <<'PY'
+          import os,re,collections
+          c=collections.Counter()
+          for d,ds,fs in os.walk('x'):
+              for s in ds:
+                  if re.match(r'^[A-Z]{4}__\d{8}$',s): c[d]+=1
+          print(c.most_common(1)[0][0] if c else '')
+          PY
+          )
+          [ -n "$root" ] || { echo "ICAO__YYYYMMDD のフォルダが見つかりません"; find x -maxdepth 3 | head -50; exit 1; }
+          echo "AIP_ROOT=$RUNNER_TEMP/aip/$root" >> "$GITHUB_ENV"; echo "found: $root ($(ls "$root" | wc -l) aerodromes)"
+      - name: AIRAC date
+        env: { IN: '${{ github.event.inputs.airac }}' }
+        run: |
+          d="$IN"; if [ -z "$d" ]; then d=$(python3 -c "
+          import datetime as D;b=D.date(2026,10,29);t=D.date.today()
+          n=(t-b).days//28;c=b+D.timedelta(days=28*n)
+          print((c if (t-c).days<14 else c+D.timedelta(days=28)).isoformat())"); fi
+          echo "AIRAC_EFF=$d" >> "$GITHUB_ENV"; echo "AIRAC $d"
+      - name: Rebuild
+        env: { HTML: '${{ github.workspace }}/index.html', CHARTS: '${{ github.workspace }}/charts', WORK: '${{ runner.temp }}/work' }
+        run: bash tools/aip/run.sh
+      - name: Service worker version
+        run: sed -i -E "s/VERSION='([a-z]+)-[0-9]+'/VERSION='\1-$(date +%s)'/" sw.js
+      - name: Pull request
+        env: { GH_TOKEN: '${{ github.token }}' }
+        run: |
+          br="aip-$AIRAC_EFF-$(date +%H%M%S)"; git config user.name "ifr-bot"; git config user.email "actions@users.noreply.github.com"
+          git checkout -b "$br"; git rm -q --cached -r aip-inbox 2>/dev/null || true
+          git add index.html sw.js charts; git commit -qm "AIP更新 AIRAC $AIRAC_EFF（手順データ・チャート画像）" || { echo "変更なし"; exit 0; }
+          git push -q origin "$br"
+          gh pr create --title "AIP更新 AIRAC $AIRAC_EFF" --body-file "$RUNNER_TEMP/work/report.md" --base main --head "$br"
