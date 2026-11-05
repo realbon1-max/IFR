@@ -9,7 +9,7 @@ for d in os.listdir(root):
 # only re-render aerodromes whose AD 2 folder date changed since the last build (charts/_src.json)
 srcf=os.path.join(out,'_src.json');SRC=json.load(open(srcf)) if os.path.exists(srcf) else {}
 OLD=json.load(open(os.environ['WORK']+'/chx_old.json')) if os.path.exists(os.environ['WORK']+'/chx_old.json') else {}
-todo={a:dt for a,dt in latest.items() if SRC.get(a)!=dt or a not in OLD or os.environ.get('CHARTS_ALL')}
+todo={a:dt for a,dt in latest.items() if SRC.get(a)!=dt or os.environ.get('CHARTS_ALL')}
 jobs=[]
 for a,dt in todo.items():
     import shutil
