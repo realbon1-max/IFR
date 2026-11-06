@@ -1227,14 +1227,15 @@ function rwyEval(icao,winds){
     const ok=worstX<=S.prof.xw && worstT<=S.prof.tw; return {r,cs,ok,worstX,worstT,minH}})
    .sort((a,b)=>(b.ok===true)-(a.ok===true)||(b.minH??-99)-(a.minH??-99));
 }
+function limTxt(e){if(!e||e.ok!==false)return '';const p=[];if(e.worstX>S.prof.xw)p.push(`横風${e.worstX}kt＞上限${S.prof.xw}kt`);if(e.worstT>S.prof.tw)p.push(`背風${e.worstT}kt＞上限${S.prof.tw}kt`);return p.join('・')}
 function rwyTable(ev){
   if(!ev.length)return '<div class="empty">滑走路データがありません。</div>';
   if(ev[0].ok===null)return '<div class="empty">風の情報がないため滑走路を判定できません。気象タブでMETAR/TAFを貼り付けてください。</div>';
   return `<div class="tbl"><table><thead><tr><th>滑走路</th><th>真方位</th><th>長さ</th><th>向かい風</th><th>横風</th><th>判定</th></tr></thead><tbody>${
    ev.map(e=>`<tr><td class="num"><b>${e.r.id}</b></td><td class="num">${e.r.b!=null?String(Math.round(e.r.b)).padStart(3,'0'):'—'}°${e.r.x?' <span class="tag t-cau">推定</span>':''}</td><td class="num">${e.r.l??'—'}m</td>
    <td class="num">${e.minH>=0?e.minH:'背風 '+(-e.minH)} kt</td><td class="num">${e.worstX} kt</td>
-   <td>${e.ok?'<span class="tag t-go">制限内</span>':'<span class="tag t-no">制限超過</span>'}</td></tr>`).join('')}</tbody></table></div>
-   <p class="note">突風がある場合は突風値で計算しています。予報の風が複数ある場合は最も厳しい値です。</p>`;
+   <td>${e.ok?'<span class="tag t-go">上限内</span>':`<span class="tag t-no">${limTxt(e)}</span>`}</td></tr>`).join('')}</tbody></table></div>
+   <p class="note">上限は「計画 → ルート・機体 → 性能・燃料・許可」で設定した値（いま 横風${S.prof.xw}kt・背風${S.prof.tw}kt）です。機体の飛行規程（RFM）と運航規程の値に合わせてください。突風がある場合は突風値で計算しています。予報の風が複数ある場合は最も厳しい値です。</p>`;
 }
 
 /* ---------- approach evaluation ---------- */
@@ -1268,7 +1269,7 @@ function apprList(icao,cond,winds){
      return {x,u,why,e,lines,score,wind}}).sort((a,b)=>(b.score>=0)-(a.score>=0)||b.wind-a.wind||b.score-a.score);
   return items.map(it=>{const x=it.x;
     const st=!it.u?`<span class="tag t-mute">${esc(it.why)}</span>`:it.score===3?'<span class="tag t-go">ミニマ以上</span>':it.score===2?'<span class="tag t-cau">雲高に注意</span>':it.score===0?'<span class="tag t-no">ミニマ未満</span>':'<span class="tag t-mute">チャートで確認</span>';
-    const wt=it.e&&it.e.ok!==null?(it.e.ok?`<span class="tag t-go">RWY${x.rw} 風 制限内</span>`:`<span class="tag t-no">RWY${x.rw} 風 制限超過</span>`):(x.rw?'':'<span class="tag t-mute">周回進入</span>');
+    const wt=it.e&&it.e.ok!==null?(it.e.ok?`<span class="tag t-go">RWY${x.rw} 風 制限内</span>`:`<span class="tag t-no">RWY${x.rw} ${limTxt(it.e)}</span>`):(x.rw?'':'<span class="tag t-mute">周回進入</span>');
     const rows=it.lines.map(l=>`<tr><td>${esc(l.m.l)}${l.m.ok?'':' <span class="tag t-cau">要確認</span>'}</td><td class="num">${esc(l.j.v?l.j.v[0]:'—')}</td><td class="num">${esc(l.j.v?l.j.v[1]:'—')}</td><td>${l.use?`<span class="tag t-${l.j.s}">${l.j.t}</span>`:'<span class="tag t-mute">対象外</span>'}</td></tr>`).join('');
     return `<details class="appr${it.u?'':' dim'}"${it===items[0]&&it.u?' open':''}><summary><span class="an">${esc(x.n)}</span>${x.ar?'<span class="tag t-rnav">AR</span>':''}${st}${wt}</summary><div class="body">
       ${(()=>{const l=it.lines.find(l=>l.use&&l.j.h&&l.j.vis);if(!l||!cond)return '';return `<div class="gw">${gauge('視程（'+esc(l.m.l)+'）',cond.vis??10000,l.j.vis,'m',v=>v>=10000?'10km+':v)}${gauge('雲高（ミニマ高 HAT）',cond.ceil??99999,l.j.h.hat,'ft',v=>v>=99999?'なし':v)}</div>`})()}
@@ -1634,7 +1635,7 @@ function renderDep0(){const i=S.route.dep,A=ap(i);
   const sidRows=C.rows.filter(l=>l.kind==='SID'||l.kind==='TRN');
   $('depOut').innerHTML=`<div class="hero"><div><div class="hk">出発</div><div class="hi code">${esc(i)}</div><div class="hn">${esc(A.n)}　標高 ${A.e??'—'}ft</div></div><div class="hk2">ETD（ブロックアウト）<b class="code">${t?zt(t):'—'}</b><br>離陸 <b class="code">${t?zt(new Date(+t+(+S.perf.taxiMin||0)*60e3)):'—'}</b></div></div>
    <div class="two"><div>${windRose(i,winds[0],P.drw)}</div><div>${wxBadge(cond)}
-     ${ev[0]&&ev[0].ok!==null?statusCard(ev[0].ok?'go':'no',`おすすめの滑走路 RWY${ev[0].r.id}`,`向かい風 <b class="code">${ev[0].minH}kt</b>　横風 <b class="code">${ev[0].worstX}kt</b>`):''}
+     ${ev[0]&&ev[0].ok!==null?statusCard(ev[0].ok?'go':'no',`おすすめの滑走路 RWY${ev[0].r.id}`,`${ev[0].minH>=0?'向かい風':'背風'} <b class="code">${Math.abs(ev[0].minH)}kt</b>　横風 <b class="code">${ev[0].worstX}kt</b>${ev[0].ok?'':`<br><span style="color:var(--no);font-weight:700">${limTxt(ev[0])}</span>`}<br><small style="color:var(--muted)">上限 横風${S.prof.xw}kt・背風${S.prof.tw}kt（ルート・機体で設定）</small>`):''}
      ${statusCard(P.sid?'go':'mute',P.sid?`SID ${esc(P.sid)}`:'SID未選択',P.sid?`RWY${esc(P.drw)} から ${sidRows.map(l=>esc(l.b)).join(' → ')}<br>約 <b class="code">${Math.round(sidRows.reduce((s,l)=>s+(l.d||0),0))}NM・${hhmm(sidRows.reduce((s,l)=>s+(l.d||0),0)/C.tas*60)}</b>`:'下のおすすめから「これにする」を押すと、距離と時間を出します')}</div></div>
    ${recBox('sid')}
    <div class="box">${procDepUI()}<p class="note">ここで選んだ内容は、航空路タブ・飛行計画・FMS・ATC交信にそのまま反映されます。下のSIDのカードを押しても選べます。</p></div>
@@ -1651,7 +1652,7 @@ function renderArr0(){const i=S.route.dst,A=ap(i);
   const arrRows=C.rows.filter(l=>l.kind==='STAR'||l.kind==='APP');
   $('arrOut').innerHTML=`<div class="hero"><div><div class="hk">到着</div><div class="hi code">${esc(i)}</div><div class="hn">${esc(A.n)}　標高 ${A.e??'—'}ft</div></div><div class="hk2">ETA（着陸）<b class="code">${t?zt(t):'—'}</b><br>カテゴリー <b class="code">${S.prof.cat}</b></div></div>
    <div class="two"><div>${windRose(i,winds[0],ev[0]&&ev[0].ok?ev[0].r.id:null)}</div><div>${wxBadge(cond)}
-     ${ev[0]&&ev[0].ok!==null?statusCard(ev[0].ok?'go':'no',`おすすめの滑走路 RWY${ev[0].r.id}`,`向かい風 <b class="code">${ev[0].minH}kt</b>　横風 <b class="code">${ev[0].worstX}kt</b>`):''}
+     ${ev[0]&&ev[0].ok!==null?statusCard(ev[0].ok?'go':'no',`おすすめの滑走路 RWY${ev[0].r.id}`,`${ev[0].minH>=0?'向かい風':'背風'} <b class="code">${Math.abs(ev[0].minH)}kt</b>　横風 <b class="code">${ev[0].worstX}kt</b>${ev[0].ok?'':`<br><span style="color:var(--no);font-weight:700">${limTxt(ev[0])}</span>`}<br><small style="color:var(--muted)">上限 横風${S.prof.xw}kt・背風${S.prof.tw}kt（ルート・機体で設定）</small>`):''}
      ${statusCard(P.star||P.app?'go':'mute',`${P.star?'STAR '+esc(P.star):'STAR未選択'}${P.app?'／'+esc(P.app):''}`,arrRows.length?arrRows.map(l=>`${esc(l.a)} → ${esc(String(l.b))}`).join('<br>')+`<br>約 <b class="code">${Math.round(arrRows.reduce((s,l)=>s+(l.d||0),0))}NM・${hhmm(arrRows.reduce((s,l)=>s+(l.d||0),0)/C.tas*60)}</b>`:'下のおすすめからSTARと進入方式を選ぶと、距離と時間を出します')}</div></div>
    ${recBox('star')}${recBox('app')}
    <div class="box">${procArrUI()}<p class="note">ここで選んだ内容は、航空路タブ・飛行計画・FMS・ATC交信にそのまま反映されます。進入方式は下の一覧の「この進入方式にする」でも選べます。</p></div>
@@ -1667,7 +1668,7 @@ function renderAlt(){
   const d=S.route.dst,a=S.route.alt,eta=utc(S.route.eta); let h='';
   const ta=S.route.talt;if(ap(ta)&&ap(S.route.dep)){const dd=gc(ap(S.route.dep).p,ap(ta).p);const tm=dd/(S.fpl.tas||120)*60;const etd=utc(S.route.etd);const t0=etd?new Date(+etd+((+S.perf.taxiMin||0)+tm)*60e3):null;const cond=condFor(ta,t0);const winds=windsFor(ta,t0);const ev=rwyEval(ta,winds);
     h+=`<h2>離陸代替飛行場</h2><div class="hero"><div><div class="hk">離陸代替</div><div class="hi code">${esc(ta)}</div><div class="hn">${esc(ap(ta).n)}　${esc(S.route.dep)}から直線 ${Math.round(dd)}NM・約${hhmm(tm)}</div></div><div class="hk2">離陸直後に向かった場合の到着<b class="code">${t0?zt(t0):'—'}</b></div></div>
-     <div class="two"><div>${windRose(ta,winds[0],ev[0]&&ev[0].ok?ev[0].r.id:null)}</div><div>${wxBadge(cond)}${ev[0]&&ev[0].ok!==null?statusCard(ev[0].ok?'go':'no',`おすすめの滑走路 RWY${ev[0].r.id}`,`向かい風 <b class="code">${ev[0].minH}kt</b>　横風 <b class="code">${ev[0].worstX}kt</b>`):''}</div></div>
+     <div class="two"><div>${windRose(ta,winds[0],ev[0]&&ev[0].ok?ev[0].r.id:null)}</div><div>${wxBadge(cond)}${ev[0]&&ev[0].ok!==null?statusCard(ev[0].ok?'go':'no',`おすすめの滑走路 RWY${ev[0].r.id}`,`${ev[0].minH>=0?'向かい風':'背風'} <b class="code">${Math.abs(ev[0].minH)}kt</b>　横風 <b class="code">${ev[0].worstX}kt</b>${ev[0].ok?'':`<br><span style="color:var(--no);font-weight:700">${limTxt(ev[0])}</span>`}<br><small style="color:var(--muted)">上限 横風${S.prof.xw}kt・背風${S.prof.tw}kt（ルート・機体で設定）</small>`):''}</div></div>
      <details class="appr"><summary><span class="an">進入方式（CAT ${S.prof.cat}）を見る</span></summary><div class="body">${apprList(ta,cond,winds)}</div></details>
      <p class="note">出発地の天候が離陸はできても着陸できない（引き返せない）場合に使う飛行場です。距離・時間の基準は運航規程で確認してください。飛行計画の18欄に TALT/${esc(ta)} として入ります。</p>`}
 const ceilMin=1969, visMin=5000;
@@ -1678,7 +1679,7 @@ const ceilMin=1969, visMin=5000;
      <p class="note">目安：目的地ETA前後1時間の予報で雲高600m（約1,970ft）以上かつ視程5,000m以上（航空運送事業の運航規程審査要領細則の基準）。自家用などは各自の運航規程・法令に従ってください。</p>`}
   if(ap(a)){const t=eta?new Date(+eta+S.route.altOff*60e3):null;const cond=condFor(a,t);const winds=windsFor(a,t);const ev=rwyEval(a,winds);const dd=ap(d)?gc(ap(d).p,ap(a).p):null;
     h+=`<div class="hero" style="margin-top:18px"><div><div class="hk">代替</div><div class="hi code">${esc(a)}</div><div class="hn">${esc(ap(a).n)}${dd?`　${esc(d)}から直線 ${Math.round(dd)}NM`:''}</div></div><div class="hk2">到着予定<b class="code">${t?zt(t):'—'}</b></div></div>
-     <div class="two"><div>${windRose(a,winds[0],ev[0]&&ev[0].ok?ev[0].r.id:null)}</div><div>${wxBadge(cond)}${ev[0]&&ev[0].ok!==null?statusCard(ev[0].ok?'go':'no',`おすすめの滑走路 RWY${ev[0].r.id}`,`向かい風 <b class="code">${ev[0].minH}kt</b>　横風 <b class="code">${ev[0].worstX}kt</b>`):''}</div></div>
+     <div class="two"><div>${windRose(a,winds[0],ev[0]&&ev[0].ok?ev[0].r.id:null)}</div><div>${wxBadge(cond)}${ev[0]&&ev[0].ok!==null?statusCard(ev[0].ok?'go':'no',`おすすめの滑走路 RWY${ev[0].r.id}`,`${ev[0].minH>=0?'向かい風':'背風'} <b class="code">${Math.abs(ev[0].minH)}kt</b>　横風 <b class="code">${ev[0].worstX}kt</b>${ev[0].ok?'':`<br><span style="color:var(--no);font-weight:700">${limTxt(ev[0])}</span>`}<br><small style="color:var(--muted)">上限 横風${S.prof.xw}kt・背風${S.prof.tw}kt（ルート・機体で設定）</small>`):''}</div></div>
      <h3>使用滑走路の候補</h3>${rwyTable(ev)}<h3>進入方式（CAT ${S.prof.cat}）</h3>${apprList(a,cond,winds)}`}
   else h+='<div class="empty" style="margin-top:12px">ルートタブで代替飛行場を選ぶと、ここで進入方式を判定します。</div>';
   $('altOut').innerHTML=h;
@@ -3230,7 +3231,7 @@ function apEval(icao,t,pick){const A=ap(icao);if(!A)return null;const cond=condF
   return {cond,ev,top:pool[0]||null,picked:!!picked.length}}
 function apItemS(E){if(!E.cond)return 'unk';if(!E.top)return 'cau';let s=E.top.best?E.top.best.j.s:'cau';if(s==='mute')s='cau';if(E.top.e&&E.top.e.ok===false)s='no';return s}
 function apItemV(E,lbl){if(!E.cond)return `${lbl}の天気がありません`;if(!E.top)return '使える計器進入方式がありません（装備・許可を確認）';const b=E.top.best;
-  return `${esc(E.top.x.n)}${E.picked?'':'（おすすめ）'}：${b?esc(b.j.t):'ミニマはチャートで確認'}<small>${esc(condText(E.cond))}${E.top.e&&E.top.e.ok!==null?`・RWY${E.top.e.r.id} 横風${E.top.e.worstX}kt${E.top.e.ok?'':'（制限超過）'}`:''}</small>`}
+  return `${esc(E.top.x.n)}${E.picked?'':'（おすすめ）'}：${b?esc(b.j.t):'ミニマはチャートで確認'}<small>${esc(condText(E.cond))}${E.top.e&&E.top.e.ok!==null?`・RWY${E.top.e.r.id} 横風${E.top.e.worstX}kt${E.top.e.ok?'':'（'+limTxt(E.top.e)+'）'}`:''}</small>`}
 
 /* ---------- MSM icing / freezing level along the route ---------- */
 function msmIcing(){if(typeof MSM==='undefined')return null;const D=MSM.data;if(!D||!D.lv||!D.plan)return null;const pl=D.plan;const na=pl.air.length;const hit=[];let fz=null;
@@ -3242,7 +3243,7 @@ function msmIcing(){if(typeof MSM==='undefined')return null;const D=MSM.data;if(
 function briefItems(){const r=S.route;const okD=i=>i&&(ap(i)||isZ(i));if(!okD(r.dep)||!okD(r.dst))return null;const P=procSel();const etd=utc(r.etd),eta=utc(r.eta);const I=[];
   I.push(etd?{k:'time',l:'出発・到着時刻',s:'go',v:`ETD ${fmtZ(etd)}　ETA ${fmtZ(eta)}`,tab:'route',el:'etd'}:{k:'time',l:'出発・到着時刻',s:'cau',v:'ETDが未入力です。天気・代替・燃料を現況で仮判定しています',tab:'route',el:'etd',fx:'ETDを入力'});
   if(ap(r.dep)){const c=condFor(r.dep,etd);const e=rwyEval(r.dep,depWinds(r.dep,etd))[0];let s=!c?'unk':(e&&e.ok===false)?'no':((c.vis??10000)<1600||(c.ceil!=null&&c.ceil<500))?'cau':'go';
-    I.push({k:'dep',l:`出発 ${esc(r.dep)}`,s,v:!c?'出発地の天気がありません':`${esc(condText(c))}${e&&e.ok!==null?`<small>RWY${e.r.id} 横風${e.worstX}kt${e.ok?'':'（制限超過）'}${s==='cau'?'・離陸ミニマを確認':''}</small>`:''}`,tab:c?'dep':'wx',fx:c?'':'気象を取得'})}
+    I.push({k:'dep',l:`出発 ${esc(r.dep)}`,s,v:!c?'出発地の天気がありません':`${esc(condText(c))}${e&&e.ok!==null?`<small>${etd&&wxFor(r.dep).taf?'ETD前後の予報':'現況METAR'}・RWY${e.r.id} 横風${e.worstX}kt${e.ok?'':'（'+limTxt(e)+'）'}${s==='cau'?'・離陸ミニマを確認':''}</small>`:''}`,tab:c?'dep':'wx',fx:c?'':'気象を取得'})}
   if(ap(r.dst)&&r.arrRule!=='vfr'){const E=apEval(r.dst,eta,P.app);const s=apItemS(E);I.push({k:'dst',l:`目的地 ${esc(r.dst)} の進入`,s,v:apItemV(E,'目的地'),tab:E.cond?'arr':'wx',fx:E.cond?(E.picked?'':'進入方式を選ぶ'):'気象を取得'})}
   const N=altNeed();
   if(N)I.push({k:'altneed',l:'代替飛行場の要否',s:N.s,v:`${esc(N.t)}<small>${esc(N.b)}</small>`,tab:eta?'alt':'route',el:eta?'':'etd',fx:eta?'':'ETDを入力'});
@@ -3386,7 +3387,7 @@ function airacCheck(){const today=new Date().toISOString().slice(0,10);
 load();bind();navInit();airacCheck();show(S.tab||(S.route.dep&&S.route.dst?'sum':'route'));renderAll();try{decoHeadings();let _dh=0;new MutationObserver(()=>{if(_dh)return;_dh=requestAnimationFrame(()=>{_dh=0;decoHeadings()})}).observe(document.body,{childList:true,subtree:true})}catch(e){}if(S.wxPoll)wxPollSet(1);
 </script>
 <script>
-window.APPV='20261106130709';
+window.APPV='20261106165955';
 (function(){const a=document.querySelector('.airac');if(a){const s=document.createElement('span');s.className='appv';const v=window.APPV;s.textContent=' · アプリ版 '+v.slice(4,6)+'/'+v.slice(6,8)+' '+v.slice(8,10)+':'+v.slice(10,12);a.appendChild(s)}})();
 if('serviceWorker' in navigator&&window.isSecureContext){const had=!!navigator.serviceWorker.controller;
   navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!window.__swr){window.__swr=1;location.reload()}});
