@@ -3386,9 +3386,24 @@ function airacCheck(){const today=new Date().toISOString().slice(0,10);
 load();bind();navInit();airacCheck();show(S.tab||(S.route.dep&&S.route.dst?'sum':'route'));renderAll();try{decoHeadings();let _dh=0;new MutationObserver(()=>{if(_dh)return;_dh=requestAnimationFrame(()=>{_dh=0;decoHeadings()})}).observe(document.body,{childList:true,subtree:true})}catch(e){}if(S.wxPoll)wxPollSet(1);
 </script>
 <script>
+window.APPV='20261106125902';
+(function(){const a=document.querySelector('.airac');if(a){const s=document.createElement('span');s.className='appv';const v=window.APPV;s.textContent=' · アプリ版 '+v.slice(4,6)+'/'+v.slice(6,8)+' '+v.slice(8,10)+':'+v.slice(10,12);a.appendChild(s)}})();
 if('serviceWorker' in navigator&&window.isSecureContext){const had=!!navigator.serviceWorker.controller;
   navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!window.__swr){window.__swr=1;location.reload()}});
-  navigator.serviceWorker.register('./sw.js').catch(()=>{})}
+  navigator.serviceWorker.register('./sw.js').then(reg=>{window.__reg=reg}).catch(()=>{})}
+/* 新しい版の確認：起動時・アプリに戻った時・30分ごと */
+(function(){let busy=false;
+  function check(auto){if(busy)return;busy=true;fetch('./version.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{busy=false;if(!j||!j.v||j.v===window.APPV)return;
+      try{window.__reg&&window.__reg.update().catch(()=>{})}catch(e){}
+      const typing=document.activeElement&&/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
+      if(auto&&!typing){location.reload();return}
+      if(document.getElementById('updBar'))return;const b=document.createElement('div');b.id='updBar';b.setAttribute('role','status');
+      b.innerHTML='<span>新しい版があります</span><button type="button" class="act">更新する</button>';b.querySelector('button').onclick=()=>location.reload();document.body.appendChild(b)}).catch(()=>{busy=false})}
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')check(true)});
+  window.addEventListener('pageshow',e=>{if(e.persisted)check(true)});
+  setTimeout(()=>check(false),4000);setInterval(()=>check(false),30*60*1000)})();
 </script>
+<style>#updBar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom));z-index:60;display:flex;gap:12px;align-items:center;padding:8px 10px 8px 16px;background:var(--card);color:var(--ink);border:1px solid var(--mag);box-shadow:0 8px 24px rgba(0,0,0,.3);font-weight:700}
+.appv{font-variant-numeric:tabular-nums}</style>
 </body>
 </html>
