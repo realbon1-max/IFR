@@ -799,6 +799,11 @@ html[data-theme="ace"] .flchips span{background:#0A1626;border-color:var(--line2
 .fplogi[open]{padding-bottom:10px}.fplogi>.fpltxt,.fplogi>.row{margin-left:12px;margin-right:12px}
 html[data-theme="ace"] .rmkb{background:#0A1626;border-color:var(--line2);border-radius:0}
 html[data-theme="ace"] .fplogi{background:linear-gradient(180deg,var(--card2),var(--card));border-color:var(--line2)}
+tr.lead td{background:var(--paper);font-size:13px;padding:7px 10px;border-left:3px solid transparent}
+tr.lead small{color:var(--muted)}
+.leadi{display:inline-block;width:20px;font-weight:800;color:var(--mag);font-size:16px}
+td.hdgc b{font-variant-numeric:tabular-nums;white-space:nowrap}td.hdgc small{white-space:nowrap}
+html[data-theme="ace"] tr.lead td{background:#0A1626;color:var(--ink)}
 /* summary END */
 /* === ACE THEME（ファイター・パイロット風／オリジナル） === */
 :root[data-theme="ace"]{
@@ -2431,6 +2436,14 @@ function recBind(root){root.querySelectorAll('[data-rec]').forEach(b=>b.onclick=
   else if(k==='star'){P.star=o.star;P.starE=o.starE;P.arrMode='star'}
   else{P.app=o.x.n}
   if(typeof MAP!=='undefined'&&MAP)MAP.key='';save();renderAll()})}
+function magVarAt(p){const A=ap(S.route.dep);if(A&&A.mv!=null)return A.mv;return -(5+(p[0]-26)*0.27)}
+function legWind(pa,pb){const D=typeof MSM!=='undefined'&&MSM.data;if(!D||!D.lv||!D.plan)return null;const mid=[(pa[0]+pb[0])/2,(pa[1]+pb[1])/2];const pl=D.plan,na=pl.air.length;let bk=-1,bd=1e9;pl.rp.forEach((r,k)=>{const d=gc(mid,r.p);if(d<bd){bd=d;bk=k}});if(bk<0||bd>40)return null;
+  const r=pl.rp[bk];const J=D.j[na+bk];if(!J||!J.hourly)return null;const i=msmIdx(J,+r.t);if(i<0)return null;const ft=lvlFt(S.fpl.lvl)||r.ft;const m=msmAt(J,i,ft);return m&&m.ws!=null&&m.wd!=null?{wd:m.wd,ws:m.ws,ft}:null}
+function windTri(tc,tas,w){if(!w)return {hdg:tc,gs:tas,wca:0};const a=(w.wd-tc)*RAD;const s=w.ws*Math.sin(a)/tas;if(Math.abs(s)>1)return null;const wca=Math.asin(s)/RAD;return {hdg:(tc+wca+360)%360,gs:tas*Math.cos(wca*RAD)-w.ws*Math.cos(a),wca}}
+const h3=v=>{v=Math.round(((v%360)+360)%360);if(v===0)v=360;return String(v).padStart(3,'0')};
+/* 旋回リード（計算タブ「旋回リード計算・航空路の変針」と同じ式：標準旋回率・バンク上限25°、リード＝R·tan(θ/2)） */
+function leadInfo(c1,c2,v){const sd=((c2-c1+540)%360)-180;const th=Math.abs(sd);if(th<5)return null;let b=Math.atan(3*v/1091)/RAD;if(b>25)b=25;const R=v*v/(68417*Math.tan(b*RAD));const L=R*Math.tan(th*RAD/2);const w=(v/3600)/R/RAD;return {dir:sd>0?'右':'左',th,b,R,L,sec:Math.round(th/w),lsec:Math.round(L/v*3600)}}
+function legNav(l,tas){if(l.kind!=='ENR'||l.c==null)return null;const pa=fixPos(l.a),pb=fixPos(l.b);if(!pa||!pb)return null;const mv=magVarAt(pa);const mc=(l.c-mv+360)%360;const w=legWind(pa,pb);const T=windTri(l.c,tas,w);return {mc,w,T,hdgM:T?(T.hdg-mv+360)%360:null}}
 function renderEnr(){
   const C=routeCalc(); const {r,rows,tot,time,tas,sc}=C; const rn5=S.prof.caps.rnav5||S.prof.caps.rnav1;
   $('rteIn').value=S.route.rte||'';
@@ -2487,15 +2500,19 @@ function renderEnr(){
   bindProfile();bindMap();
   // legs table with sector changes interleaved
   let cum=0,ct=0; const chg=[...sc.changes]; let html='';
-  const secRow=c=>`<tr class="sect"><td colspan="6">📻 管制区の切替　出発から約${Math.round(c.dist)}NM：${esc(sectName(c.from))}${c.from?'（'+sectFreq(c.from)+'）':''} → <b>${esc(sectName(c.to))}</b>${c.to?'（<b class="code">'+sectFreq(c.to)+'</b>）':''}</td></tr>`;
-  if(rows.length&&sc.first)html+=`<tr class="sect"><td colspan="6">📻 出発時の管制区：<b>${esc(sectName(sc.first))}</b>（<b class="code">${sectFreq(sc.first)}</b>）</td></tr>`;
-  rows.forEach(l=>{const t=l.d?l.d/tas*60:null;const m=meaFt(l.mea);const ice=fz!=null&&m!=null&&m>=fz;const low=lv&&m&&lv<m;
-    html+=`<tr class="ph-${l.kind}"><td class="num"><small style="color:var(--muted)">${PH[l.kind][0]}</small><br>${esc(l.a)}→${esc(l.b)}</td><td class="num">${esc(l.via)}${l.rnav?' <span class="tag t-rnav">RNAV</span>':''}</td><td class="num">${l.d!=null?l.d.toFixed(0)+'NM':'—'}</td><td class="num">${t!=null?hhmm(t):'—'}<br><small>累計 ${hhmm(ct+(t||0))}</small></td><td class="num">${l.kind==='ENR'?esc(l.mea||'—')+(String(l.mea||'').includes('/')?'<br><small>区間内で変化</small>':''):'—'}</td>
+  const secRow=c=>`<tr class="sect"><td colspan="7">📻 管制区の切替　出発から約${Math.round(c.dist)}NM：${esc(sectName(c.from))}${c.from?'（'+sectFreq(c.from)+'）':''} → <b>${esc(sectName(c.to))}</b>${c.to?'（<b class="code">'+sectFreq(c.to)+'</b>）':''}</td></tr>`;
+  if(rows.length&&sc.first)html+=`<tr class="sect"><td colspan="7">📻 出発時の管制区：<b>${esc(sectName(sc.first))}</b>（<b class="code">${sectFreq(sc.first)}</b>）</td></tr>`;
+  const NV=rows.map(l=>legNav(l,tas));
+  rows.forEach((l,ri)=>{const t=l.d?l.d/tas*60:null;const m=meaFt(l.mea);const nv=NV[ri];const ice=fz!=null&&m!=null&&m>=fz;const low=lv&&m&&lv<m;
+    html+=`<tr class="ph-${l.kind}"><td class="num"><small style="color:var(--muted)">${PH[l.kind][0]}</small><br>${esc(l.a)}→${esc(l.b)}</td><td class="num">${esc(l.via)}${l.rnav?' <span class="tag t-rnav">RNAV</span>':''}</td><td class="num hdgc">${nv?`<b>HDG ${nv.hdgM!=null?h3(nv.hdgM):'—'}°</b><br><small>MC ${h3(nv.mc)}°${nv.w?`・風 ${h3(nv.w.wd)}°/${Math.round(nv.w.ws)}kt`:'・無風'}</small>${nv.w&&nv.T?`<br><small>修正 ${nv.T.wca>=0?'右':'左'}${Math.abs(nv.T.wca).toFixed(0)}°・GS ${Math.round(nv.T.gs)}kt</small>`:''}`:'—'}</td><td class="num">${l.d!=null?l.d.toFixed(0)+'NM':'—'}</td><td class="num">${t!=null?hhmm(t):'—'}<br><small>累計 ${hhmm(ct+(t||0))}</small></td><td class="num">${l.kind==='ENR'?esc(l.mea||'—')+(String(l.mea||'').includes('/')?'<br><small>区間内で変化</small>':''):'—'}</td>
     <td>${l.note?`<small>${esc(l.note)}</small><br>`:''}${l.cop?`<span class="tag t-mute">${esc(l.cop)}</span> `:''}${l.via==='DCT'?(l.pub?'<span class="tag t-go">公示直行経路</span>':'<span class="tag t-cau">非公示の直行・管制の承認が必要</span>'):''}${l.rnav&&!rn5?'<span class="tag t-no">RNAVの許可が必要</span>':''}${low?'<span class="tag t-no">計画高度がMEA未満</span>':''}${ice?'<span class="tag t-cau">MEAが0℃高度以上</span>':''}</td></tr>`;
+    {const n2=NV[ri+1];if(nv&&n2&&l.b===rows[ri+1].a){const v=(nv.T&&nv.T.gs)||tas;const Ld=leadInfo(l.c,rows[ri+1].c,tas);
+      if(Ld){const isNav=NAV.F[l.b]&&NAV.F[l.b][2]===1;const short=(l.d!=null&&Ld.L>l.d*0.5)||(rows[ri+1].d!=null&&Ld.L>rows[ri+1].d*0.5);
+        html+=`<tr class="lead"><td colspan="7"><span class="leadi" aria-hidden="true">${Ld.dir==='右'?'↱':'↰'}</span><b>${esc(l.b)}</b> で${Ld.dir}へ <b>${Ld.th.toFixed(0)}°</b> 変針（MC ${h3(nv.mc)}°→${h3(n2.mc)}°）：変針点の <b class="code">${Ld.L.toFixed(2)}NM</b> 手前${isNav?`（${esc(l.b)} DME ${Ld.L.toFixed(1)}）`:''}・約${Math.max(1,Math.round(Ld.L/v*3600))}秒前に旋回開始<small>　バンク${Ld.b.toFixed(0)}°・半径${Ld.R.toFixed(2)}NM・旋回${Ld.sec}秒${short?'・<b style="color:var(--cau)">区間が短いので早めの旋回に注意</b>':''}</small></td></tr>`}}}
     cum+=l.d||0;ct+=t||0; while(chg.length&&chg[0].dist<=cum+0.01)html+=secRow(chg.shift())});
   chg.forEach(c=>html+=secRow(c));
-  $('rteLegs').innerHTML=rows.length?`<div class="tbl"><table><thead><tr><th>区間</th><th>経路</th><th>距離</th><th>時間</th><th>MEA</th><th>備考</th></tr></thead><tbody>${html}</tbody></table></div>
-   <p class="note">SID・STAR・進入は、TASで標準旋回（3°/秒、旋回半径 約${turnR(tas).toFixed(1)}NM）をしたと仮定した概算です。上昇率 ${S.perf.roc||500}ft/分。待機・方式旋回は含みません${S.proc&&S.proc.arrMode==='vec'?'（レーダー誘導は見込みの距離を加算）':'。レーダー誘導は含みません'}。管制区は計画高度 ${C.lvl.toLocaleString()}ft で判定しています（ENR 2.1）。</p>`:'<div class="empty">ルートタブで出発・目的飛行場を選ぶと、ここに区間と時間が出ます。</div>';
+  $('rteLegs').innerHTML=rows.length?`<div class="tbl"><table><thead><tr><th>区間</th><th>経路</th><th>針路</th><th>距離</th><th>時間</th><th>MEA</th><th>備考</th></tr></thead><tbody>${html}</tbody></table></div>
+   <p class="note">針路（HDG）は磁針路。気象タブのMSM予報を取得していれば計画高度の風で修正した値、なければ無風のMC（磁方位）です。変針の行は計算タブ「旋回リード計算（航空路の変針）」と同じ式（TAS ${tas}kt・標準旋回率・バンク上限25°、リード＝旋回半径×tan(変針角/2)）で、ロールインの遅れは含みません。<br>SID・STAR・進入は、TASで標準旋回（3°/秒、旋回半径 約${turnR(tas).toFixed(1)}NM）をしたと仮定した概算です。上昇率 ${S.perf.roc||500}ft/分。待機・方式旋回は含みません${S.proc&&S.proc.arrMode==='vec'?'（レーダー誘導は見込みの距離を加算）':'。レーダー誘導は含みません'}。管制区は計画高度 ${C.lvl.toLocaleString()}ft で判定しています（ENR 2.1）。</p>`:'<div class="empty">ルートタブで出発・目的飛行場を選ぶと、ここに区間と時間が出ます。</div>';
 }
 let GEO=null,WGEO=null,LAKES=null;
 function loadGeo(){if(window.__geoTried)return;window.__geoTried=1;
@@ -3599,7 +3616,7 @@ function airacCheck(){const today=new Date().toISOString().slice(0,10);
 load();bind();navInit();airacCheck();show(S.tab||(S.route.dep&&S.route.dst?'sum':'route'));renderAll();try{decoHeadings();let _dh=0;new MutationObserver(()=>{if(_dh)return;_dh=requestAnimationFrame(()=>{_dh=0;decoHeadings()})}).observe(document.body,{childList:true,subtree:true})}catch(e){}if(S.wxPoll)wxPollSet(1);
 </script>
 <script>
-window.APPV='20261107104816';
+window.APPV='20261107110929';
 (function(){const a=document.querySelector('.airac');if(a){const s=document.createElement('span');s.className='appv';const v=window.APPV;s.textContent=' · アプリ版 '+v.slice(4,6)+'/'+v.slice(6,8)+' '+v.slice(8,10)+':'+v.slice(10,12);a.appendChild(s)}})();
 if('serviceWorker' in navigator&&window.isSecureContext){const had=!!navigator.serviceWorker.controller;
   navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!window.__swr){window.__swr=1;location.reload()}});
