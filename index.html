@@ -784,6 +784,21 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select{min-height
 .flkoku small{display:block;color:var(--muted);font-size:12px}
 .flk2{display:flex;flex-wrap:wrap;gap:4px 16px}
 html[data-theme="ace"] .flchips span{background:#0A1626;border-color:var(--line2);color:var(--ink)}
+.rmkt{margin-top:8px}
+.rmkh{font-size:12.5px;color:var(--muted);margin-bottom:6px}
+.rmkc{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:6px}
+.rmkb{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:8px 10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;font:inherit;min-height:44px}
+.rmkb b{font-size:12.5px}.rmkb span{font-size:11.5px;color:var(--muted);word-break:break-all}
+.rmkb:hover{border-color:var(--sky)}
+.rmku{flex-direction:row;padding:0;align-items:stretch}
+.rmku>button:first-child{flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:8px 10px;background:none;border:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.rmkx{border:none;border-left:1px solid var(--line);background:none;color:var(--muted);width:40px;font-size:18px;cursor:pointer}
+.fplog{display:grid;gap:6px}
+.fplogi{border:1px solid var(--line);background:var(--card)}
+.fplogi>summary{display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:10px 12px;cursor:pointer;min-height:44px}
+.fplogi[open]{padding-bottom:10px}.fplogi>.fpltxt,.fplogi>.row{margin-left:12px;margin-right:12px}
+html[data-theme="ace"] .rmkb{background:#0A1626;border-color:var(--line2);border-radius:0}
+html[data-theme="ace"] .fplogi{background:linear-gradient(180deg,var(--card2),var(--card));border-color:var(--line2)}
 /* summary END */
 /* === ACE THEME（ファイター・パイロット風／オリジナル） === */
 :root[data-theme="ace"]{
@@ -1127,7 +1142,9 @@ html[data-theme="ace"] .leg.add.need{border:1px solid rgba(242,193,78,.55);borde
 <section class="pane" id="p-fpl">
   <h2>飛行計画のひな形</h2>
   <p class="hint">ルート・機体・航空路の入力から、飛行計画書に書く文字を組み立てます。空欄は自分で埋めてください。</p>
+  <div class="box acbox"></div>
   <div class="box">
+    <p class="note" id="fplAcNote" style="margin:0 0 10px"></p>
     <div class="grid">
       <label class="f">7 航空機識別（登録記号）<input class="code" id="f_id" placeholder="例 JA01AB"></label>
       <label class="f">8 飛行の種類<select id="f_type"><option value="G">G 一般</option><option value="N">N 不定期</option><option value="S">S 定期</option><option value="M">M 軍用</option><option value="X">X その他</option></select></label>
@@ -1140,6 +1157,7 @@ html[data-theme="ace"] .leg.add.need{border:1px solid rgba(242,193,78,.55);borde
     <h3>PBNのセンサー</h3>
     <div class="caps" id="sens"></div>
     <label class="f" style="margin-top:10px">その他の情報（RMK/ など、任意）<input class="code" id="f_rmk" placeholder="RMK/..."></label>
+    <div id="rmkT" class="rmkt"></div>
   </div>
   <div id="fplOut"></div>
 </section>
@@ -1738,7 +1756,7 @@ function keepDef(k,D){if(!S[k]||typeof S[k]!=='object')S[k]={};for(const x in D)
 function acList(){try{return JSON.parse(localStorage.getItem('ifr-aircraft')||'[]')}catch(e){return []}}
 function acStore(L){try{localStorage.setItem('ifr-aircraft',JSON.stringify(L));return true}catch(e){return false}}
 function acSnapshot(name){const F=fmsSet();const fms={};['u','sg','bow','bcg','pil','hook','str','clb','dsc','ang','crz'].forEach(k=>{if(F[k]!==undefined)fms[k]=F[k]});
-  const fpl={};['id','type','ac','wake','tas','sur','end','rmk'].forEach(k=>fpl[k]=S.fpl[k]);
+  const fpl={};['id','type','ac','wake','tas','sur','end','pob','rmk'].forEach(k=>fpl[k]=S.fpl[k]);
   return {name,at:new Date().toISOString(),fpl,perf:JSON.parse(JSON.stringify(S.perf||{})),prof:JSON.parse(JSON.stringify(S.prof||{})),fms}}
 function acPanel(){const L=acList();const cur=S.acName||'';
   return `<h3 class="bh">機体データ（記録・呼び出し）</h3><p class="note" style="margin:0 0 6px">登録記号・型式・装備・性能・FMSの基本重量などを機体ごとに記録して、次からワンタップで呼び出せます（この端末に保存）。乗客・手荷物・風は記録しません。</p>
@@ -3047,6 +3065,43 @@ function pbnCodes(){const c=S.prof.caps,s=S.prof.sens,o=[];
 function equip(){const s=S.prof.sens;let e='S';if(s.dme)e+='D';if(s.gnss)e+='G';if(s.irs)e+='I';if(pbnCodes().length)e+='R';return e}
 function hhmm(min){min=Math.round(min||0);return String(Math.floor(min/60)).padStart(2,'0')+String(min%60).padStart(2,'0')}
 function syncEta(){const C=routeCalc();const etd=utc(S.route.etd);if($('eta'))$('eta').disabled=!!S.route.etaAuto;if(S.route.etaAuto&&etd&&C.time>0){const e=new Date(+etd+(C.time+(+S.perf.taxiMin||0))*60e3).toISOString().slice(0,16);if(S.route.eta!==e){S.route.eta=e;if($('eta'))$('eta').value=e;save()}}return C}
+/* ---------- 飛行計画：RMKの雛型・記録 ---------- */
+function rmkVals(){const r=S.route,P=procSel();const D=dispIcao(r.dst)||'____',DEP=dispIcao(r.dep)||'____';const APP=(P.app||'').toUpperCase().replace(/\s+/g,' ');
+  let FIX='____';try{const A=ap(r.dst);if(A){const n=near(A.p,25,1);if(n.length)FIX=n[0][0]}}catch(e){}
+  const lv=(S.fpl.lvl||'').toUpperCase();const ft=lv?(lvlFt(lv)||0):0;const ALT=ft?(ft>=14000?'FL'+String(Math.round(ft/100)).padStart(3,'0'):ft+'FT'):'';return {D,DEP,APP,FIX,ALT}}
+const RMK_T=[
+ ['計器進入の訓練（進入後に復行）',v=>`PRACTICE APCH ${v.APP?v.APP+' ':''}${v.D} THEN MISSED APCH`],
+ ['ローアプローチ',v=>`LOW APCH ${v.D}`],
+ ['タッチアンドゴー',v=>`TGL ${v.D}`],
+ ['複数回の進入',v=>`MULTIPLE APCH ${v.D}`],
+ ['ホールディングの訓練',v=>`HOLDING TRNG OVER ${v.FIX}${v.ALT?' '+v.ALT:''}`],
+ ['模擬計器飛行（安全監視操縦者あり）',v=>'SIMULATED IFR FLT WITH SAFETY PILOT'],
+ ['進入後に出発地へ戻る',v=>`RTN TO ${v.DEP} AFTER APCH`],
+ ['計器飛行の訓練',v=>'IFR TRNG FLT']];
+function rmkUser(){try{return JSON.parse(localStorage.getItem('ifr-rmktpl')||'[]')}catch(e){return []}}
+function rmkUserSet(L){try{localStorage.setItem('ifr-rmktpl',JSON.stringify(L.slice(0,30)))}catch(e){}}
+function rmkInsert(t){const el=$('f_rmk');let cur=(S.fpl.rmk||'').trim();t=t.trim().toUpperCase();
+  if(cur.toUpperCase().includes(t))return;cur=!cur?'RMK/'+t:/RMK\//i.test(cur)?cur+' '+t:cur+' RMK/'+t;S.fpl.rmk=cur;if(el)el.value=cur;save();renderAll();announce('RMKに追加しました')}
+function renderRmkT(){const box=$('rmkT');if(!box)return;const v=rmkVals();const U=rmkUser();
+  box.innerHTML=`<div class="rmkh">雛型から追加（タップすると上の欄に足します。値は今の計画から入れています）</div><div class="rmkc">${RMK_T.map(([l,f],i)=>`<button type="button" class="rmkb" data-rmk="${i}"><b>${l}</b><span class="code">${esc(f(v))}</span></button>`).join('')}
+    ${U.map((t,i)=>`<span class="rmkb rmku"><button type="button" data-rmku="${i}"><b>記録した雛型</b><span class="code">${esc(t)}</span></button><button type="button" class="rmkx" data-rmkdel="${i}" aria-label="この雛型を消す">×</button></span>`).join('')}</div>
+    <div class="row" style="gap:8px;margin-top:6px"><button type="button" class="sub" id="rmkSave">いまのRMKを雛型に記録</button><button type="button" class="sub" id="rmkClr">RMKを空にする</button></div><p class="note" style="margin:4px 0 0">言い回しは所属の運航規程や管制機関との調整に合わせて直してください。</p>`;
+  box.querySelectorAll('[data-rmk]').forEach(b=>b.onclick=()=>rmkInsert(RMK_T[+b.dataset.rmk][1](rmkVals())));
+  box.querySelectorAll('[data-rmku]').forEach(b=>b.onclick=()=>rmkInsert(rmkUser()[+b.dataset.rmku]||''));
+  box.querySelectorAll('[data-rmkdel]').forEach(b=>b.onclick=()=>{const L=rmkUser();L.splice(+b.dataset.rmkdel,1);rmkUserSet(L);renderRmkT()});
+  $('rmkSave').onclick=()=>{const t=(S.fpl.rmk||'').replace(/^.*?RMK\//i,'').trim().toUpperCase();if(!t){announce('RMKが空です');return}const L=rmkUser();if(!L.includes(t)){L.unshift(t);rmkUserSet(L)}renderRmkT()};
+  $('rmkClr').onclick=()=>{S.fpl.rmk='';const el=$('f_rmk');if(el)el.value='';save();renderAll()}}
+function fplLog(){try{return JSON.parse(localStorage.getItem('ifr-fplog')||'[]')}catch(e){return []}}
+function fplLogSet(L){try{localStorage.setItem('ifr-fplog',JSON.stringify(L.slice(0,30)));return true}catch(e){return false}}
+function fplLogHtml(){const L=fplLog();if(!L.length)return '<p class="note">まだ記録はありません。「この飛行計画を記録」を押すと、ここに残ります（この端末に保存・最新30件）。</p>';
+  return `<div class="fplog">${L.map((x,i)=>{const d=new Date(x.at);const j=new Date(+d+9*3600e3);return `<details class="fplogi"><summary><span class="code">${esc(x.dep||'')} → ${esc(x.dst||'')}${x.alt?' <small>ALT '+esc(x.alt)+'</small>':''}</span><span>${esc(x.id||'')}</span><span class="note" style="margin:0">${j.getUTCFullYear()}/${j.getUTCMonth()+1}/${j.getUTCDate()} ${String(j.getUTCHours()).padStart(2,'0')}:${String(j.getUTCMinutes()).padStart(2,'0')} JST${x.etd?'・ETD '+esc(x.etd):''}</span></summary><div class="fpltxt">${esc(x.txt)}</div><div class="row" style="gap:8px;margin-top:6px"><button type="button" class="sub" data-logcp="${i}">文字をコピー</button><button type="button" class="sub" data-logrmk="${i}">このRMKを使う</button><button type="button" class="sub" data-logdel="${i}">削除</button></div></details>`}).join('')}</div>`}
+function fplLogBind(txt){const sv=$('fplSave');if(sv)sv.onclick=()=>{const r=S.route;const L=fplLog();const etd=utc(r.etd);L.unshift({at:new Date().toISOString(),txt,dep:dispIcao(r.dep),dst:dispIcao(r.dst),alt:r.alt||'',id:(S.fpl.id||'').toUpperCase(),rmk:S.fpl.rmk||'',etd:etd?fmtZ(etd):''});
+    if(fplLogSet(L)){sv.textContent='記録しました';$('fplLog').innerHTML=fplLogHtml();fplLogBind(txt);announce('飛行計画を記録しました')}else sv.textContent='記録できませんでした'};
+  document.querySelectorAll('[data-logcp]').forEach(b=>b.onclick=async()=>{const x=fplLog()[+b.dataset.logcp];try{await navigator.clipboard.writeText(x.txt);b.textContent='コピーしました'}catch(e){b.textContent='コピーできませんでした'}});
+  document.querySelectorAll('[data-logrmk]').forEach(b=>b.onclick=()=>{const x=fplLog()[+b.dataset.logrmk];S.fpl.rmk=x.rmk||'';const el=$('f_rmk');if(el)el.value=S.fpl.rmk;save();renderAll()});
+  document.querySelectorAll('[data-logdel]').forEach(b=>b.onclick=()=>{const L=fplLog();L.splice(+b.dataset.logdel,1);fplLogSet(L);$('fplLog').innerHTML=fplLogHtml();fplLogBind(txt)})}
+function fplAcNote(){const el=$('fplAcNote');if(!el)return;const n=S.acName;el.innerHTML=n?`機体「<b class="code">${esc(n)}</b>」の設定を反映しています（7 登録記号・9 型式・後方乱気流区分・10 装備・監視装置・PBN・搭乗者数・巡航速度）。変えたら上の「記録する」で機体に残せます。`:'上の「機体データ」で機体を呼び出すと、7・9・10・PBN・搭乗者数などがまとめて入ります。いま入っている値は「記録する」で機体として残せます。'}
+
 function renderFpl(){const F=S.fpl,r=S.route;const C=routeCalc();const pr=C.r;const etd=utc(r.etd);
   const eet=C.time||null; const spd='N'+String(Math.round(F.tas||0)).padStart(4,'0'); const lvl=(F.lvl||'').toUpperCase()||'A___';
   const pbn=pbnCodes(); const dof=etd?`${String(etd.getUTCFullYear()).slice(2)}${String(etd.getUTCMonth()+1).padStart(2,'0')}${String(etd.getUTCDate()).padStart(2,'0')}`:'';
@@ -3074,10 +3129,13 @@ function renderFpl(){const F=S.fpl,r=S.route;const C=routeCalc();const pr=C.r;co
     <p class="note">${esc(fu.note)}。代替飛行場までは直線距離の1.1倍で概算しています。${fu.contZero?'<br><b style="color:var(--no)">「不測の事態（告示）」の時間が0分です。告示の量を確認して機体・性能の欄に入力してください。</b>':''}</p>`}
   else fuelH='<p class="hint">ルート・機体タブで燃料消費率を入れると、法定の必要燃料と飛行可能時間を計算します。</p>';
   $('fplOut').innerHTML=timeline(C,'飛行の流れ（UTC）')+`<h3>飛行計画の電文形式</h3><div class="fpltxt" id="fplTxt">${esc(txt)}</div>
-   <div class="row" style="margin-top:8px"><button class="sub" id="fplCopy" type="button">文字をコピー</button></div>
+   <div class="row" style="margin-top:8px;gap:8px"><button class="sub" id="fplCopy" type="button">文字をコピー</button><button class="act" id="fplSave" type="button">この飛行計画を記録</button></div>
    <p class="note">所要時間 ${eet?hhmm(eet):'—'}（SID・航空路・STAR・進入を含むTAS無風の概算）。${sidN?`SID「${esc(P.sid)}」は経路欄に書く必要があるか、管制方式で確認してください。`:''}</p>
    <h3>欄ごとの記入内容</h3><div class="tbl"><table><thead><tr><th>欄</th><th>項目</th><th>記入</th></tr></thead><tbody>${rows.map(x=>`<tr><td class="num">${x[0]}</td><td>${x[1]}</td><td class="num">${esc(x[2])}</td></tr>`).join('')}</tbody></table></div>${fuelH}
-   <p class="note">装備欄とPBN欄は許可とセンサーの設定から作った候補です。機体の承認内容に合わせて直してください。${pr.errs.length?'<br><b style="color:var(--no)">航空路タブの経路にエラーがあります。</b>':''}</p>`;
+   <p class="note">装備欄とPBN欄は許可とセンサーの設定から作った候補です。機体の承認内容に合わせて直してください。${pr.errs.length?'<br><b style="color:var(--no)">航空路タブの経路にエラーがあります。</b>':''}</p>
+   <h3>記録した飛行計画</h3><div id="fplLog">${fplLogHtml()}</div>`;
+  try{fplLogBind(txt)}catch(e){}try{renderRmkT()}catch(e){}try{fplAcNote()}catch(e){}
+  {const fe=$('f_end');if(fe)fe.placeholder=fu&&fu.endur>0?'空欄なら自動 '+hhmm(fu.endur)+'（搭載燃料から）':'例 0430';}
   $('fplCopy').onclick=async()=>{try{await navigator.clipboard.writeText(txt);$('fplCopy').textContent='コピーしました'}catch(e){const rg=document.createRange();rg.selectNodeContents($('fplTxt'));const s=getSelection();s.removeAllRanges();s.addRange(rg);$('fplCopy').textContent='選択しました。コピーしてください'}};
 }
 
@@ -3541,7 +3599,7 @@ function airacCheck(){const today=new Date().toISOString().slice(0,10);
 load();bind();navInit();airacCheck();show(S.tab||(S.route.dep&&S.route.dst?'sum':'route'));renderAll();try{decoHeadings();let _dh=0;new MutationObserver(()=>{if(_dh)return;_dh=requestAnimationFrame(()=>{_dh=0;decoHeadings()})}).observe(document.body,{childList:true,subtree:true})}catch(e){}if(S.wxPoll)wxPollSet(1);
 </script>
 <script>
-window.APPV='20261107100718';
+window.APPV='20261107104816';
 (function(){const a=document.querySelector('.airac');if(a){const s=document.createElement('span');s.className='appv';const v=window.APPV;s.textContent=' · アプリ版 '+v.slice(4,6)+'/'+v.slice(6,8)+' '+v.slice(8,10)+':'+v.slice(10,12);a.appendChild(s)}})();
 if('serviceWorker' in navigator&&window.isSecureContext){const had=!!navigator.serviceWorker.controller;
   navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!window.__swr){window.__swr=1;location.reload()}});
