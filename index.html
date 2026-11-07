@@ -804,6 +804,19 @@ tr.lead small{color:var(--muted)}
 .leadi{display:inline-block;width:20px;font-weight:800;color:var(--mag);font-size:16px}
 td.hdgc b{font-variant-numeric:tabular-nums;white-space:nowrap}td.hdgc small{white-space:nowrap}
 html[data-theme="ace"] tr.lead td{background:#0A1626;color:var(--ink)}
+
+/* press feedback / selected / toast */
+button,.act,.sub{transition:transform .08s ease,filter .12s ease,background-color .15s ease}
+button:active:not(:disabled){transform:scale(.96);filter:brightness(1.25)}
+.sugopt.sel{background:var(--go-soft);box-shadow:inset 3px 0 0 var(--go);padding-left:10px!important;padding-right:8px!important;border-radius:4px}
+.selbadge{display:inline-block;font-size:11.5px;font-weight:700;color:var(--go);border:1px solid var(--go);border-radius:3px;padding:0 6px;margin-left:6px;vertical-align:1px;letter-spacing:.02em}
+.selbtn{display:inline-block;font-size:13px;font-weight:700;color:var(--go);padding:8px 4px}
+#toast{position:fixed;left:50%;width:max-content;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,16px);opacity:0;pointer-events:none;z-index:9999;display:flex;gap:8px;align-items:center;max-width:min(92vw,460px);background:var(--ink);color:var(--paper);font-weight:600;font-size:14px;padding:10px 16px;border-radius:6px;box-shadow:0 6px 24px rgba(0,0,0,.35);transition:opacity .18s ease,transform .18s ease}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+#toast .ti{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--go);color:#fff;font-size:12px;flex:0 0 auto}
+#toast.bad .ti{background:var(--no)}
+@media (max-width:640px){#toast{bottom:calc(84px + env(safe-area-inset-bottom))}}
+@media (prefers-reduced-motion:reduce){button:active:not(:disabled){transform:none}#toast{transition:none}}
 /* summary END */
 /* === ACE THEME（ファイター・パイロット風／オリジナル） === */
 :root[data-theme="ace"]{
@@ -2324,12 +2337,13 @@ function sugUI(){const k=sugKey();if(!SUG||SUG.k!==k)SUG={k,r:null};const r=SUG.
   let h=`<div class="row" style="justify-content:space-between;align-items:center"><b>おすすめルート（最短距離）</b><button class="sub" type="button" id="sugGo">${r?'探し直す':'探す'}</button></div>
    <p class="note" style="margin:4px 0">航空路・公示直行経路・SID/トランジション・STARをつないで、飛行距離が短い順に出します。探したあと、下の経路図に案1〜3が点線で出るので、線をタップして選べます。機体の許可（RNAV1/RNAV5）と、飛べる上限（経路図の「上限」設定、ふだんは巡航高度）より高いMEA・SID/STARの高度制限は外します。管制の指定や運用方向は考えに入れていないので、使う前にAIP・NOTAMで確かめてください。概略図の地図：地球地図日本（国土地理院）を簡略化、湖は © OpenStreetMap contributors。</p>`;
   if(r){if(!r.opts.length)h+=`<div class="msg cau">${esc(r.why)}</div>`;
-    h+=r.opts.map((o,i)=>`<div class="sugopt" style="border-top:1px solid var(--line);padding:8px 0;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between"><div style="flex:1 1 240px;min-width:0"><b class="code">${i+1}. 約${Math.round(o.tot)}NM　${hhmm(o.tot/(S.fpl.tas||120)*60)}</b>
+    const P0=procSel();const isCur=o=>o.rte===S.route.rte&&(o.sid||'')===(P0.sid||'')&&(o.star||'')===(P0.star||'');
+    h+=r.opts.map((o,i)=>`<div class="sugopt${isCur(o)?' sel':''}" style="border-top:1px solid var(--line);padding:8px 0;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between"><div style="flex:1 1 240px;min-width:0"><b class="code">${i+1}. 約${Math.round(o.tot)}NM　${hhmm(o.tot/(S.fpl.tas||120)*60)}</b>${isCur(o)?' <span class="selbadge">✓ 選択中</span>':''}
       <div style="font-size:13px;margin-top:4px"><span class="tag t-ok" style="background:#2E8B5722;color:#2E8B57">SID</span> ${esc(o.sidN)}${o.sid?'':''}<br><span class="tag" style="background:#C2185B22;color:var(--mag)">経路</span> <span class="code">${esc(o.rte)}</span><br><span class="tag" style="background:#C98A0022;color:#9A6508">STAR</span> ${esc(o.starN)}</div>
-      <div class="note" style="margin:2px 0 0">直線距離 ${Math.round(o.direct)}NM の ${Math.round(o.tot/o.direct*100)}%</div></div>${thumbRoute(o)}<div style="flex:0 0 auto"><button class="act" type="button" data-sug="${i}">このルートにする</button></div></div>`).join('')}
+      <div class="note" style="margin:2px 0 0">直線距離 ${Math.round(o.direct)}NM の ${Math.round(o.tot/o.direct*100)}%</div></div>${thumbRoute(o)}<div style="flex:0 0 auto">${isCur(o)?'<span class="selbtn">✓ このルートを使用中</span>':`<button class="act" type="button" data-sug="${i}">このルートにする</button>`}</div></div>`).join('')}
   return h}
 function sugBind(){const b=$('sugGo');if(b)b.onclick=()=>{b.textContent='探しています…';setTimeout(()=>{SUG={k:sugKey(),r:sugCompute()};renderEnr()},10)};
-  document.querySelectorAll('[data-sug]').forEach(x=>x.onclick=()=>{const o=SUG.r.opts[+x.dataset.sug];const P=procSel();S.route.rte=o.rte;P.sid=o.sid;P.sidE=0;P.sidT=o.sidT;P.star=o.star;P.starE=o.starE;P.arrMode=o.star?'star':'vec';S.plView={};S._selAw=null;if(typeof MAP!=='undefined'&&MAP)MAP.key='';save();renderAll()})}
+  document.querySelectorAll('[data-sug]').forEach(x=>x.onclick=()=>{const n=+x.dataset.sug;const o=SUG.r.opts[n];const P=procSel();S.route.rte=o.rte;P.sid=o.sid;P.sidE=0;P.sidT=o.sidT;P.star=o.star;P.starE=o.starE;P.arrMode=o.star?'star':'vec';S.plView={};S._selAw=null;if(typeof MAP!=='undefined'&&MAP)MAP.key='';save();renderAll();toast(`案${n+1}のルート（約${Math.round(o.tot)}NM）を設定しました`)})}
 /* ---------- recommendations: SID / transition / STAR / approach ---------- */
 function flyLimit(){try{return mapLimit()}catch(e){return null}}
 function limText(){const L=flyLimit(),f=mapF();return L!=null?`飛べる上限 ${L.toLocaleString()}ft（${f.src==='lvl'?'巡航高度':f.src==='fz'?'予想0℃高度':'指定値'}）`:'飛べる上限：未設定（巡航高度を入れると、それより高い高度制限の手順を外します）'}
@@ -2429,14 +2443,14 @@ function recBox(kind){if(kind==='sid'&&S.route.depMode==='vfr'&&S.route.ifrFix)r
   const P=procSel();const cur=o=>kind==='sid'?(o.sid===P.sid&&o.sidT===P.sidT):kind==='star'?(o.star===P.star&&o.starE===(P.starE||0)):(o.x.n===P.app);
   const ttl={sid:'おすすめのSID・トランジション',star:'おすすめのSTAR',app:'おすすめの進入方式'}[kind];
   h=`<div class="box"><b>${ttl}</b><p class="note" style="margin:2px 0 0"><b>${esc(limText())}</b>。上限より高い高度制限のある手順は出しません。${kind!=='app'?'下の図の線をタップしても選べます。':''}</p><p class="note" style="margin:2px 0 6px">${kind==='app'?'到着時刻の風・天気予報、機体の装備、ミニマの低さ、STARからのつながりで順位をつけています。':kind==='sid'?'風に合う滑走路、航空路とのつながり、目的地までの距離で順位をつけています。':'航空路の最後のfixとのつながりと、着陸までの距離で順位をつけています。'}</p>`+
-   L.map((o,i)=>{const nm=kind==='app'?o.x.n:o.name;const th=thumbRec(kind,o);return `<div style="border-top:1px solid var(--line);padding:8px 0;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center"><div style="flex:1 1 220px;min-width:0"><b class="code">${i+1}. ${esc(nm)}</b>${cur(o)?' <span class="tag t-mute">選択中</span>':''}<div style="font-size:12.5px;color:var(--muted);margin-top:2px">${o.why.map(esc).join('・')}</div></div>${th}<div style="flex:0 0 auto;min-width:96px;text-align:right">${cur(o)?'':`<button class="act" type="button" data-rec="${kind}|${i}">これにする</button>`}</div></div>`}).join('')+'</div>';
+   L.map((o,i)=>{const nm=kind==='app'?o.x.n:o.name;const th=thumbRec(kind,o);return `<div class="sugopt${cur(o)?' sel':''}" style="border-top:1px solid var(--line);padding:8px 0;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center"><div style="flex:1 1 220px;min-width:0"><b class="code">${i+1}. ${esc(nm)}</b>${cur(o)?' <span class="selbadge">✓ 選択中</span>':''}<div style="font-size:12.5px;color:var(--muted);margin-top:2px">${o.why.map(esc).join('・')}</div></div>${th}<div style="flex:0 0 auto;min-width:96px;text-align:right">${cur(o)?'<span class="selbtn">✓ 使用中</span>':`<button class="act" type="button" data-rec="${kind}|${i}">これにする</button>`}</div></div>`}).join('')+'</div>';
   REC[kind]=L;return h}
 const REC={};
 function recBind(root){root.querySelectorAll('[data-rec]').forEach(b=>b.onclick=()=>{const [k,i]=b.dataset.rec.split('|');const o=REC[k][+i];const P=procSel();
   if(k==='sid'){P.sid=o.sid;P.sidT=o.sidT;P.sidE=0;if(o.rw){P.drw=o.rw}const C=routeCalc();if(!(C.r.pts||[]).length&&o.end){S.route.rte=o.end}}
   else if(k==='star'){P.star=o.star;P.starE=o.starE;P.arrMode='star'}
   else{P.app=o.x.n}
-  if(typeof MAP!=='undefined'&&MAP)MAP.key='';save();renderAll()})}
+  if(typeof MAP!=='undefined'&&MAP)MAP.key='';save();renderAll();toast(({sid:'SID',star:'STAR',app:'進入方式'})[k]+'を「'+(k==='app'?o.x.n:o.name)+'」にしました')})}
 function magVarAt(p){const A=ap(S.route.dep);if(A&&A.mv!=null)return A.mv;return -(5+(p[0]-26)*0.27)}
 function legWind(pa,pb){const D=typeof MSM!=='undefined'&&MSM.data;if(!D||!D.lv||!D.plan)return null;const mid=[(pa[0]+pb[0])/2,(pa[1]+pb[1])/2];const pl=D.plan,na=pl.air.length;let bk=-1,bd=1e9;pl.rp.forEach((r,k)=>{const d=gc(mid,r.p);if(d<bd){bd=d;bk=k}});if(bk<0||bd>40)return null;
   const r=pl.rp[bk];const J=D.j[na+bk];if(!J||!J.hourly)return null;const i=msmIdx(J,+r.t);if(i<0)return null;const ft=lvlFt(S.fpl.lvl)||r.ft;const m=msmAt(J,i,ft);return m&&m.ws!=null&&m.wd!=null?{wd:m.wd,ws:m.ws,ft}:null}
@@ -3078,7 +3092,7 @@ function bindMap(){const svg=$('mapSvg');if(!svg||!MAP)return;const C=MAP.C;
   gestures(svg,{pan:(dx,dy)=>{const k=MAP.vb.w/svg.clientWidth;MAP.vb.x-=dx*k;MAP.vb.y-=dy*k;req()},
     zoom:(f,cx,cy)=>{const v=MAP.vb,k=v.w/svg.clientWidth;const ux=v.x+cx*k,uy=v.y+cy*k;let nw=Math.max(15,Math.min(2500,v.w/f));const nf=nw/v.w;v.x=ux-(ux-v.x)*nf;v.y=uy-(uy-v.y)*nf;v.w=nw;v.h=v.h*nf;req()},
     dbl:e=>{const r=svg.getBoundingClientRect();const v=MAP.vb,k=v.w/svg.clientWidth;const ux=v.x+(e.clientX-r.left)*k,uy=v.y+(e.clientY-r.top)*k;v.w/=2;v.h/=2;v.x=ux-v.w/2;v.y=uy-v.h/2;req()},
-    tap:e=>{const el=document.elementFromPoint(e.clientX,e.clientY);const sg=el&&el.closest('[data-sugm]');if(sg){const o=SUG.r.opts[+sg.dataset.sugm];const P=procSel();S.route.rte=o.rte;P.sid=o.sid;P.sidE=0;P.sidT=o.sidT;P.star=o.star;P.starE=o.starE;P.arrMode=o.star?'star':'vec';S.plView={};SUG=null;MAP.key='';save();renderAll();return}
+    tap:e=>{const el=document.elementFromPoint(e.clientX,e.clientY);const sg=el&&el.closest('[data-sugm]');if(sg){const o=SUG.r.opts[+sg.dataset.sugm];const P=procSel();S.route.rte=o.rte;P.sid=o.sid;P.sidE=0;P.sidT=o.sidT;P.star=o.star;P.starE=o.starE;P.arrMode=o.star?'star':'vec';S.plView={};MAP.key='';save();renderAll();toast(`案${+sg.dataset.sugm+1}のルート（約${Math.round(o.tot)}NM）を設定しました`);return}
       const ax=el&&el.closest('[data-apx]');if(ax){apxPanel(ax.dataset.apx);return}const t=el&&el.closest('[data-fx],[data-aw],[data-dr]');if(!t){S._selAw=null;S._selFx=null;S._selDr=null;mapPanel();svg.innerHTML=mapContent(C);return}
       S._selAw=null;S._selFx=null;S._selDr=null;if(t.dataset.fx)S._selFx=t.dataset.fx;else if(t.dataset.dr!=null)S._selDr=+t.dataset.dr;else S._selAw=t.dataset.aw;svg.innerHTML=mapContent(C);mapPanel()}});
   $('mapFit').onclick=()=>{const xs=C.path.map(PX),ys=C.path.map(PY);if(xs.length){const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys),pad=Math.max(x1-x0,y1-y0)*.15+25;MAP.vb={x:x0-pad,y:y0-pad,w:x1-x0+2*pad,h:y1-y0+2*pad}}MAP.key=mapKey(C);apply()};
@@ -3149,7 +3163,7 @@ const RMK_T=[
 function rmkUser(){try{return JSON.parse(localStorage.getItem('ifr-rmktpl')||'[]')}catch(e){return []}}
 function rmkUserSet(L){try{localStorage.setItem('ifr-rmktpl',JSON.stringify(L.slice(0,30)))}catch(e){}}
 function rmkInsert(t){const el=$('f_rmk');let cur=(S.fpl.rmk||'').trim();t=t.trim().toUpperCase();
-  if(cur.toUpperCase().includes(t))return;cur=!cur?'RMK/'+t:/RMK\//i.test(cur)?cur+' '+t:cur+' RMK/'+t;S.fpl.rmk=cur;if(el)el.value=cur;save();renderAll();announce('RMKに追加しました')}
+  if(cur.toUpperCase().includes(t))return;cur=!cur?'RMK/'+t:/RMK\//i.test(cur)?cur+' '+t:cur+' RMK/'+t;S.fpl.rmk=cur;if(el)el.value=cur;save();renderAll();toast('RMKに追加しました')}
 function renderRmkT(){const box=$('rmkT');if(!box)return;const v=rmkVals();const U=rmkUser();
   box.innerHTML=`<div class="rmkh">雛型から追加（タップすると上の欄に足します。値は今の計画から入れています）</div><div class="rmkc">${RMK_T.map(([l,f],i)=>`<button type="button" class="rmkb" data-rmk="${i}"><b>${l}</b><span class="code">${esc(f(v))}</span></button>`).join('')}
     ${U.map((t,i)=>`<span class="rmkb rmku"><button type="button" data-rmku="${i}"><b>記録した雛型</b><span class="code">${esc(t)}</span></button><button type="button" class="rmkx" data-rmkdel="${i}" aria-label="この雛型を消す">×</button></span>`).join('')}</div>
@@ -3164,7 +3178,7 @@ function fplLogSet(L){try{localStorage.setItem('ifr-fplog',JSON.stringify(L.slic
 function fplLogHtml(){const L=fplLog();if(!L.length)return '<p class="note">まだ記録はありません。「この飛行計画を記録」を押すと、ここに残ります（この端末に保存・最新30件）。</p>';
   return `<div class="fplog">${L.map((x,i)=>{const d=new Date(x.at);const j=new Date(+d+9*3600e3);return `<details class="fplogi"><summary><span class="code">${esc(x.dep||'')} → ${esc(x.dst||'')}${x.alt?' <small>ALT '+esc(x.alt)+'</small>':''}</span><span>${esc(x.id||'')}</span><span class="note" style="margin:0">${j.getUTCFullYear()}/${j.getUTCMonth()+1}/${j.getUTCDate()} ${String(j.getUTCHours()).padStart(2,'0')}:${String(j.getUTCMinutes()).padStart(2,'0')} JST${x.etd?'・ETD '+esc(x.etd):''}</span></summary><div class="fpltxt">${esc(x.txt)}</div><div class="row" style="gap:8px;margin-top:6px"><button type="button" class="sub" data-logcp="${i}">文字をコピー</button><button type="button" class="sub" data-logrmk="${i}">このRMKを使う</button><button type="button" class="sub" data-logdel="${i}">削除</button></div></details>`}).join('')}</div>`}
 function fplLogBind(txt){const sv=$('fplSave');if(sv)sv.onclick=()=>{const r=S.route;const L=fplLog();const etd=utc(r.etd);L.unshift({at:new Date().toISOString(),txt,dep:dispIcao(r.dep),dst:dispIcao(r.dst),alt:r.alt||'',id:(S.fpl.id||'').toUpperCase(),rmk:S.fpl.rmk||'',etd:etd?fmtZ(etd):''});
-    if(fplLogSet(L)){sv.textContent='記録しました';$('fplLog').innerHTML=fplLogHtml();fplLogBind(txt);announce('飛行計画を記録しました')}else sv.textContent='記録できませんでした'};
+    if(fplLogSet(L)){sv.textContent='記録しました';$('fplLog').innerHTML=fplLogHtml();fplLogBind(txt);toast('飛行計画を記録しました')}else sv.textContent='記録できませんでした'};
   document.querySelectorAll('[data-logcp]').forEach(b=>b.onclick=async()=>{const x=fplLog()[+b.dataset.logcp];try{await navigator.clipboard.writeText(x.txt);b.textContent='コピーしました'}catch(e){b.textContent='コピーできませんでした'}});
   document.querySelectorAll('[data-logrmk]').forEach(b=>b.onclick=()=>{const x=fplLog()[+b.dataset.logrmk];S.fpl.rmk=x.rmk||'';const el=$('f_rmk');if(el)el.value=S.fpl.rmk;save();renderAll()});
   document.querySelectorAll('[data-logdel]').forEach(b=>b.onclick=()=>{const L=fplLog();L.splice(+b.dataset.logdel,1);fplLogSet(L);$('fplLog').innerHTML=fplLogHtml();fplLogBind(txt)})}
@@ -3531,12 +3545,14 @@ function tabBadges(I){const st={};if(I)I.forEach(i=>{if(i.s==='go')return;const 
   document.querySelectorAll('#groups button').forEach(b=>{const g=GRP.find(x=>x[0]===b.dataset.g);let s=g[0]==='sum'&&I?worst(I.map(i=>i.s)):worst(g[2].map(p=>st[p]||'go'));let d=b.querySelector('.bdg');if(!d){d=document.createElement('i');d.className='bdg';d.setAttribute('aria-hidden','true');b.appendChild(d)}d.className='bdg'+(s!=='go'?' b-'+s:g[0]==='sum'&&I?' b-go':'');
     const n=I&&g[0]==='sum'?I.filter(i=>i.s!=='go').length:0;b.setAttribute('aria-label',g[1]+(s!=='go'&&s?`（${STJ[s]}${n?' '+n+'件':''}）`:''))})}
 function goTo(tab,el){show(tab);if(!el)return window.scrollTo({top:0});setTimeout(()=>{const e=$(el);if(!e)return;let d=e.closest('details');while(d){d.open=true;d=d.parentElement&&d.parentElement.closest('details')}e.scrollIntoView({block:'center',behavior:'smooth'});try{e.focus({preventScroll:true})}catch(x){}},60)}
+function toast(t,kind){announce(t);let el=document.getElementById('toast');if(!el){el=document.createElement('div');el.id='toast';el.setAttribute('aria-hidden','true');document.body.appendChild(el)}
+  el.innerHTML='<span class="ti">'+(kind==='bad'?'!':'✓')+'</span><span>'+esc(t)+'</span>';el.className=kind==='bad'?'bad':'';void el.offsetWidth;el.classList.add('on');clearTimeout(toast._t);toast._t=setTimeout(()=>el.classList.remove('on'),2600)}
 function announce(t){const l=$('live');if(!l)return;l.textContent='';setTimeout(()=>{l.textContent=t},30)}
 function navInit(){
   document.addEventListener('change',ev=>{if(ev.target&&ev.target.id==='atcReg'){const v=ev.target.value.trim().toUpperCase();if(!v)return;S.fpl.id=v;const f=$('f_id');if(f)f.value=v;save();renderAll();announce('登録記号 '+v+' を入れました')}});
   document.addEventListener('click',ev=>{const g=ev.target.closest('[data-goto]');if(g){const [t,e]=g.dataset.goto.split('|');goTo(t,e);return}
     const mp=ev.target.closest('[data-mappick]');if(mp){mapPickOpen();return}
-    const pk=ev.target.closest('[data-pick]');if(pk){const nm=pk.dataset.pick.split('|')[1]||'';setTimeout(()=>announce(nm+' を選びました'),80)}});
+    const pk=ev.target.closest('[data-pick]');if(pk){const nm=pk.dataset.pick.split('|')[1]||'';setTimeout(()=>toast(nm+' を選びました'),80)}});
   document.querySelectorAll('#groups button').forEach(b=>b.onclick=()=>{const g=GRP.find(x=>x[0]===b.dataset.g);const last=(S.gl||{})[g[0]];show(last&&g[2].includes(last)?last:g[2][0])});
   const tl=$('tabs');tl.addEventListener('keydown',ev=>{const vis=[...tl.querySelectorAll('button')].filter(b=>!b.hidden);const i=vis.indexOf(document.activeElement);if(i<0)return;let j=null;
     if(ev.key==='ArrowRight')j=(i+1)%vis.length;else if(ev.key==='ArrowLeft')j=(i-1+vis.length)%vis.length;else if(ev.key==='Home')j=0;else if(ev.key==='End')j=vis.length-1;if(j==null)return;ev.preventDefault();show(vis[j].dataset.p);vis[j].focus()});
@@ -3578,7 +3594,7 @@ function renderFuelLegal(){const box=$('fuelLeg');if(!box)return;const f=S.perf;
   box.innerHTML=head+verdict+svg+`<table class="fltbl"><tbody>${rows}<tr class="sum"><td>必要な量</td><td class="num">${Math.round(req).toLocaleString()} kg</td><td class="num">${hhmm(req/ff*60)}</td></tr></tbody></table>`
     +(fob?`<div class="flland ${land>=resv?'':'bad'}">着陸地に着いた時の残量 <b class="code">${Math.round(land).toLocaleString()}kg</b>（必要な予備 ${Math.round(resv).toLocaleString()}kg）・航続 <b class="code">${hhmm((fob-(segs.find(s=>s.key==='taxi')||{kg:0}).kg)/ff*60)}</b></div>`:'')
     +koku+`<p class="note" style="margin:8px 0 0">待機は待機中の消費率（未入力なら巡航）で計算。代替までは直線距離×1.1で概算。最終判断は運航規程・RFMの値で行ってください。</p>`;
-  const kb=$('flKokuSet');if(kb)kb.onclick=()=>{S.perf.cont=+kb.dataset.min;const el=$('p_cont');if(el)el.value=S.perf.cont;save();renderAll();announce('不測の事態の燃料を'+S.perf.cont+'分相当にしました')}}
+  const kb=$('flKokuSet');if(kb)kb.onclick=()=>{S.perf.cont=+kb.dataset.min;const el=$('p_cont');if(el)el.value=S.perf.cont;save();renderAll();toast('不測の事態の燃料を'+S.perf.cont+'分相当にしました')}}
 
 function acSumUpdate(){const el=$('acSumLine');if(!el)return;const f=S.perf,F=S.fpl;const caps=Object.entries(S.prof.caps||{}).filter(([k,v])=>v).map(([k])=>({ils:'ILS',loc:'LOC',vor:'VOR',ndb:'NDB',lnav:'LNAV',lnavvnav:'LNAV/VNAV',lpv:'LPV',ar:'RNP AR',gls:'GLS',rnav5:'RNAV5',rnav1:'RNAV1',mil:'軍用'}[k]||k));
   const bits=[F.ac||null,`TAS ${F.tas||'—'}kt`,F.lvl?F.lvl.toUpperCase():null,f.ff?`消費 ${Math.round(+f.ff).toLocaleString()}kg/時`:'燃料消費率 未入力',f.fob?`搭載 ${Math.round(+f.fob).toLocaleString()}kg`:null,`CAT ${S.prof.cat}・横風${S.prof.xw}kt`,caps.length?caps.slice(0,4).join('/')+(caps.length>4?' ほか':''):null].filter(Boolean);
@@ -3667,7 +3683,7 @@ function airacCheck(){const today=new Date().toISOString().slice(0,10);
 load();bind();navInit();airacCheck();show(S.tab||(S.route.dep&&S.route.dst?'sum':'route'));renderAll();try{decoHeadings();let _dh=0;new MutationObserver(()=>{if(_dh)return;_dh=requestAnimationFrame(()=>{_dh=0;decoHeadings()})}).observe(document.body,{childList:true,subtree:true})}catch(e){}if(S.wxPoll)wxPollSet(1);
 </script>
 <script>
-window.APPV='20261107115334';
+window.APPV='20261107121629';
 (function(){const a=document.querySelector('.airac');if(a){const s=document.createElement('span');s.className='appv';const v=window.APPV;s.textContent=' · アプリ版 '+v.slice(4,6)+'/'+v.slice(6,8)+' '+v.slice(8,10)+':'+v.slice(10,12);a.appendChild(s)}})();
 if('serviceWorker' in navigator&&window.isSecureContext){const had=!!navigator.serviceWorker.controller;
   navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!window.__swr){window.__swr=1;location.reload()}});
