@@ -756,6 +756,34 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select{min-height
 .wxoleg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
 .wxoleg span{display:inline-flex;align-items:center;gap:6px}
 .wxoleg i{display:inline-block;width:14px;height:10px}
+.fuelrow{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:12px;align-items:start}
+@media (max-width:600px){.fuelrow{grid-template-columns:1fr}}
+.flrule{font-size:13px;margin:0 0 10px}
+.flchips{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:6px}
+.flchips span{border:1px solid var(--line);background:var(--paper);padding:3px 8px;font-size:12px;font-weight:600}
+.flchips i{font-style:normal;color:var(--muted);font-weight:700}
+.flempty{font-size:13px;color:var(--muted);border:1px dashed var(--line);padding:12px;display:grid;gap:8px;justify-items:start}
+.flv{display:flex;gap:12px;align-items:center;padding:10px 12px;border:1px solid var(--line);margin-bottom:12px;background:var(--paper)}
+.flv.ok{border-color:var(--go);background:var(--go-soft)}.flv.ng{border-color:var(--no);background:var(--no-soft)}
+.flvi{flex:0 0 36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--line);color:var(--muted)}
+.flv.ok .flvi{background:var(--go);color:var(--card)}.flv.ng .flvi{background:var(--no);color:var(--card)}
+.flvt{font-weight:800;font-size:16px}.flvs{font-size:13px;margin-top:2px;line-height:1.7}.flvs .sub{margin-left:6px}
+.flbar{width:100%;height:46px;display:block;overflow:visible}
+.flaxis{position:relative;height:34px;font-size:11.5px;font-weight:700;margin-bottom:8px}
+.flaxis span{position:absolute;transform:translateX(-50%);white-space:nowrap;color:var(--no)}
+.flaxis span.fob{color:var(--ink);top:16px}
+.fltbl{width:100%;border-collapse:collapse;font-size:13px}
+.fltbl td{padding:5px 4px;border-bottom:1px solid var(--line)}
+.fltbl td i{display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:-1px}
+.fltbl td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.fltbl tr.sum td{font-weight:800;border-top:2px solid var(--ink);border-bottom:none}
+.flland{font-size:13px;margin-top:8px;padding:8px 10px;background:var(--paper);border:1px solid var(--line)}
+.flland.bad{border-color:var(--no);color:var(--no)}
+.flkoku{font-size:13px;margin-top:8px;padding:10px;border:1px solid var(--line);background:var(--paper);display:grid;gap:6px}
+.flkoku.bad{border-color:var(--cau);background:var(--cau-soft)}
+.flkoku small{display:block;color:var(--muted);font-size:12px}
+.flk2{display:flex;flex-wrap:wrap;gap:4px 16px}
+html[data-theme="ace"] .flchips span{background:#0A1626;border-color:var(--line2);color:var(--ink)}
 /* summary END */
 /* === ACE THEME（ファイター・パイロット風／オリジナル） === */
 :root[data-theme="ace"]{
@@ -1024,7 +1052,7 @@ html[data-theme="ace"] .leg.add.need{border:1px solid rgba(242,193,78,.55);borde
       <label class="f">地上走行の時間（ブロックアウトから離陸まで）<span class="inp"><input type="number" id="p_taxim" min="0" value="10"><em>分</em></span></label>
       <label class="f">酸素の警告を出す時間（10,000ft超）<span class="inp"><input type="number" id="p_o2" min="0" value="30"><em>分</em></span></label>
     </div>
-    <div class="box">
+    <div class="fuelrow"><div class="box">
       <h3 class="bh">燃料（Jet A-1）</h3>
       <label class="f">入力する燃料の単位<select id="p_iu"><option value="kg">kg（基本）</option><option value="L">L（リットル）</option><option value="lb">lb（ポンド）</option><option value="USG">USG（米ガロン）</option></select></label>
       <label class="f">燃料の密度（Jet A-1・15℃）<span class="inp"><input type="number" step="0.005" min="0.7" max="0.9" id="p_sg" value="0.80"><em>kg/L</em></span></label>
@@ -1035,6 +1063,7 @@ html[data-theme="ace"] .leg.add.need{border:1px solid rgba(242,193,78,.55);borde
       <label class="f">不測の事態の燃料（告示の量）<span class="inp"><input type="number" id="p_cont" min="0" value="0"><em>分相当</em></span></label>
       <label class="tgl"><input type="checkbox" id="p_noalt">代替に適した空港等がない（回転翼は着陸地上空で2時間待機）</label>
     </div>
+    <div class="box fuelleg" id="fuelLeg"></div></div>
   </div>
   <div class="box">
     <h3 class="bh">使える進入方式・航法（許可を受けているもの）</h3>
@@ -3393,10 +3422,42 @@ function navSync(p){const g=grpOf(p);S.gl=S.gl||{};S.gl[g[0]]=p;
   const tl=$('tabs');tl.classList.toggle('single',g[2].length<2);tl.setAttribute('aria-label',g[1]+'の項目');
   document.querySelectorAll('#tabs button').forEach(b=>{b.hidden=!g[2].includes(b.dataset.p);b.tabIndex=b.dataset.p===p?0:-1})}
 
+/* ---------- 燃料の法定要件（施行規則第153条）を図で ---------- */
+const FLK=[[/地上走行/,'taxi','#8C97A3','地上走行'],[/着陸地まで/,'trip','#2F6FD6','着陸地まで'],[/代替飛行場まで/,'alt','#C98A00','代替まで'],[/2時間/,'h2','#7A4FD0','2時間待機'],[/30分待機/,'hold','#0E8F8F','30分待機'],[/45分/,'res','#0E8F8F','巡航45分'],[/不測/,'cont','#C2477A','不測の事態']];
+function flKind(lbl){return FLK.find(k=>k[0].test(lbl))||[null,'x','#999',lbl]}
+function renderFuelLegal(){const box=$('fuelLeg');if(!box)return;const f=S.perf;const C=routeCalc();const heli=f.cat!=='plane';const r=S.route;
+  const rule=heli?(f.noAlt?{t:'代替に適した空港等がない場合',c:['着陸地まで','着陸地上空で2時間待機']}:r.alt?{t:'代替空港等を飛行計画に表示する場合',c:['着陸地まで','代替まで','代替上空450mで30分待機','不測の事態（告示）']}:{t:'代替空港等を表示しない場合',c:['着陸地まで','着陸地上空450mで30分待機','不測の事態（告示）']})
+    :(r.alt?{t:'飛行機・代替を表示する場合',c:['着陸地まで','代替まで','巡航高度で45分']}:{t:'飛行機・代替を表示しない場合',c:['着陸地まで','巡航高度で45分']});
+  const head=`<h3 class="bh">燃料の法定要件（施行規則第153条）</h3><div class="flrule"><b>${heli?'回転翼・計器飛行方式':'飛行機・計器飛行方式'}</b>：${rule.t}<div class="flchips">${rule.c.map(x=>`<span>${x}</span>`).join('<i>＋</i>')}</div></div>`;
+  if(!(C.time>0)){box.innerHTML=head+'<div class="flempty">経路が決まると、必要な燃料を計算してここに図で示します。</div>';return}
+  const F=fuelCalc(C.time,C.tot);if(!F){box.innerHTML=head+'<div class="flempty">燃料消費率（巡航）を入れると判定します。<button type="button" class="sub" data-goto="route|p_ff">燃料消費率を入力</button></div>';return}
+  const ff=+f.ff,hf=+f.hf||ff;const segs=F.it.map(([l,kg])=>{const k=flKind(l);return {l,kg,key:k[1],col:k[2],short:k[3]}}).filter(s=>s.kg>0);
+  const req=F.req,fob=F.fob;const mx=Math.max(req,fob||0)*1.08||1;const W=100;let x=0;
+  let bar='';segs.forEach(s=>{const w=s.kg/mx*W;bar+=`<rect x="${x.toFixed(3)}" y="0" width="${w.toFixed(3)}" height="14" fill="${s.col}"><title>${s.l} ${Math.round(s.kg)}kg</title></rect>`;x+=w});
+  const fx=fob?fob/mx*W:null;const rx=req/mx*W;
+  if(fob&&fob<req)bar+=`<rect x="${fx.toFixed(3)}" y="0" width="${(rx-fx).toFixed(3)}" height="14" fill="url(#flHatch)"/>`;
+  if(fob)bar+=`<line x1="${fx.toFixed(3)}" y1="-4" x2="${fx.toFixed(3)}" y2="18" stroke="var(--ink)" stroke-width="0.7"/><polygon points="${(fx-1.4).toFixed(2)},-5 ${(fx+1.4).toFixed(2)},-5 ${fx.toFixed(2)},-2" fill="var(--ink)"/>`;
+  const ok=fob?fob>=req:null;const m=fob?fob-req:null;const min=kg=>kg/ff*60;
+  // 告示の量（代替を表示する回転翼）：着陸地までの時間の10%と、着陸地上空450mで15分待機の多い方
+  let koku='';if(heli&&!f.noAlt){const a=ff*C.time/60*0.1,b=hf*15/60,need=Math.max(a,b);const have=(segs.find(s=>s.key==='cont')||{kg:0}).kg;const short=have+0.5<need;
+    koku=`<div class="flkoku ${short?'bad':''}"><div><b>不測の事態の燃料（告示）</b>${r.alt?'':'<small>（代替を表示しない場合の告示の量は告示の本文で確認してください。下は代替を表示する場合の量です）</small>'}</div>
+      <div class="flk2"><span>着陸地までの時間の10%：<b class="code">${Math.round(a)}kg</b>（${(C.time*0.1).toFixed(0)}分）</span><span>着陸地上空450mで15分待機：<b class="code">${Math.round(b)}kg</b></span></div>
+      <div>多い方 <b class="code">${Math.round(need)}kg</b> ／ いま入れている量 <b class="code">${Math.round(have)}kg</b>（${(+f.cont||0)}分相当）${short?` → <b>${Math.round(need-have)}kg 足りません</b> <button type="button" class="sub" id="flKokuSet" data-min="${Math.ceil(need/ff*60)}">告示の量（${Math.ceil(need/ff*60)}分相当）を入れる</button>`:' → 満たしています'}</div></div>`}
+  const verdict=fob?`<div class="flv ${ok?'ok':'ng'}"><span class="flvi">${stIco(ok?'go':'no')}</span><div><div class="flvt">${ok?'法定の量を満たしています':'法定の量に足りません'}</div><div class="flvs">搭載 <b class="code">${kgL(fob)}</b> ／ 必要 <b class="code">${kgL(req)}</b>　${ok?'余裕':'不足'} <b class="code">${kgL(Math.abs(m))}</b>（巡航で約${Math.max(1,Math.round(Math.abs(m)/ff*60))}分${Math.abs(m)/ff*60<1?'未満':''}）</div></div></div>`
+    :`<div class="flv"><span class="flvi">${stIco('unk')}</span><div><div class="flvt">必要な量は ${kgL(req)}</div><div class="flvs">搭載燃料を入れると判定します <button type="button" class="sub" data-goto="route|p_fob">搭載燃料を入力</button></div></div></div>`;
+  const svg=`<svg class="flbar" viewBox="-2 -7 104 30" preserveAspectRatio="none" aria-hidden="true"><defs><pattern id="flHatch" width="2.2" height="2.2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="2.2" height="2.2" fill="var(--no-soft)"/><line x1="0" y1="0" x2="0" y2="2.2" stroke="var(--no)" stroke-width="1"/></pattern></defs><rect x="0" y="0" width="100" height="14" fill="var(--line)" opacity=".5"/>${bar}<line x1="${rx.toFixed(3)}" y1="-4" x2="${rx.toFixed(3)}" y2="18" stroke="var(--no)" stroke-width="0.6" stroke-dasharray="1 1"/></svg>
+    <div class="flaxis">${(()=>{const L=(v,t,c)=>{const q=(v+2)/104*100;const tr=q>70?'-100%':q<30?'0':'-50%';return `<span${c?' class="'+c+'"':''} style="left:${q.toFixed(1)}%;transform:translateX(${tr})">${t}</span>`};return L(rx,'必要 '+Math.round(req).toLocaleString()+'kg')+(fob?L(fx,'搭載 '+Math.round(fob).toLocaleString()+'kg','fob'):'')})()}</div>`;
+  const rows=segs.map(s=>`<tr><td><i style="background:${s.col}"></i>${esc(s.l)}</td><td class="num">${Math.round(s.kg).toLocaleString()} kg</td><td class="num">${s.key==='taxi'?'—':Math.round(s.kg/(s.key==='hold'||s.key==='h2'?hf:ff)*60)+'分'}</td></tr>`).join('');
+  const land=fob?fob-(segs.find(s=>s.key==='taxi')||{kg:0}).kg-(segs.find(s=>s.key==='trip')||{kg:0}).kg:null;const resv=req-(segs.find(s=>s.key==='taxi')||{kg:0}).kg-(segs.find(s=>s.key==='trip')||{kg:0}).kg;
+  box.innerHTML=head+verdict+svg+`<table class="fltbl"><tbody>${rows}<tr class="sum"><td>必要な量</td><td class="num">${Math.round(req).toLocaleString()} kg</td><td class="num">${hhmm(req/ff*60)}</td></tr></tbody></table>`
+    +(fob?`<div class="flland ${land>=resv?'':'bad'}">着陸地に着いた時の残量 <b class="code">${Math.round(land).toLocaleString()}kg</b>（必要な予備 ${Math.round(resv).toLocaleString()}kg）・航続 <b class="code">${hhmm((fob-(segs.find(s=>s.key==='taxi')||{kg:0}).kg)/ff*60)}</b></div>`:'')
+    +koku+`<p class="note" style="margin:8px 0 0">待機は待機中の消費率（未入力なら巡航）で計算。代替までは直線距離×1.1で概算。最終判断は運航規程・RFMの値で行ってください。</p>`;
+  const kb=$('flKokuSet');if(kb)kb.onclick=()=>{S.perf.cont=+kb.dataset.min;const el=$('p_cont');if(el)el.value=S.perf.cont;save();renderAll();announce('不測の事態の燃料を'+S.perf.cont+'分相当にしました')}}
+
 function acSumUpdate(){const el=$('acSumLine');if(!el)return;const f=S.perf,F=S.fpl;const caps=Object.entries(S.prof.caps||{}).filter(([k,v])=>v).map(([k])=>({ils:'ILS',loc:'LOC',vor:'VOR',ndb:'NDB',lnav:'LNAV',lnavvnav:'LNAV/VNAV',lpv:'LPV',ar:'RNP AR',gls:'GLS',rnav5:'RNAV5',rnav1:'RNAV1',mil:'軍用'}[k]||k));
   const bits=[F.ac||null,`TAS ${F.tas||'—'}kt`,F.lvl?F.lvl.toUpperCase():null,f.ff?`消費 ${Math.round(+f.ff).toLocaleString()}kg/時`:'燃料消費率 未入力',f.fob?`搭載 ${Math.round(+f.fob).toLocaleString()}kg`:null,`CAT ${S.prof.cat}・横風${S.prof.xw}kt`,caps.length?caps.slice(0,4).join('/')+(caps.length>4?' ほか':''):null].filter(Boolean);
   el.textContent=bits.join(' · ');const d=$('acSec');if(d&&!d.dataset.init){d.dataset.init=1;d.open=!S.acName||!f.ff}}
-function renderAll(){try{acSumUpdate()}catch(e){}try{zSync();zBoxRender()}catch(e){}try{lvlListUpdate()}catch(e){}try{acRenderAll()}catch(e){}setTimeout(wxAutoOnChange,0);const C0=syncEta();try{$('etaNote').textContent=C0.time>0?`地上走行 ${+S.perf.taxiMin||0}分＋飛行時間 ${hhmm(C0.time)}（${Math.round(C0.tot)}NM・TAS ${C0.tas}kt）から自動計算`+(S.route.etd?'':'　※ETDを入れると計算します'):'';const sg=+S.perf.sg||0.8;const iu=S.perf.iu||'kg';const q=(id,k,per)=>{const el=$(id);if(!el)return;const em=el.parentElement.querySelector('em');const kg=+S.perf[k];const h=per?'/時':'';if(em){const parts=[];if(kg){if(iu!=='kg')parts.push(Math.round(kg).toLocaleString()+' kg'+h);if(iu!=='L')parts.push(Math.round(kg/sg).toLocaleString()+' L'+h)}em.textContent=iu+h+(parts.length?'（'+parts.join('・')+'）':'')}};q('p_ff','ff',1);q('p_hf','hf',1);q('p_fob','fob');q('p_taxi','taxi')}catch(e){};loadGeo();renderStrip();renderWx();renderDep();renderEnr();renderArr();renderAlt();renderFpl();renderFms();renderAtc();renderChk();renderSum()}
+function renderAll(){try{acSumUpdate()}catch(e){}try{renderFuelLegal()}catch(e){console.error(e)}try{zSync();zBoxRender()}catch(e){}try{lvlListUpdate()}catch(e){}try{acRenderAll()}catch(e){}setTimeout(wxAutoOnChange,0);const C0=syncEta();try{$('etaNote').textContent=C0.time>0?`地上走行 ${+S.perf.taxiMin||0}分＋飛行時間 ${hhmm(C0.time)}（${Math.round(C0.tot)}NM・TAS ${C0.tas}kt）から自動計算`+(S.route.etd?'':'　※ETDを入れると計算します'):'';const sg=+S.perf.sg||0.8;const iu=S.perf.iu||'kg';const q=(id,k,per)=>{const el=$(id);if(!el)return;const em=el.parentElement.querySelector('em');const kg=+S.perf[k];const h=per?'/時':'';if(em){const parts=[];if(kg){if(iu!=='kg')parts.push(Math.round(kg).toLocaleString()+' kg'+h);if(iu!=='L')parts.push(Math.round(kg/sg).toLocaleString()+' L'+h)}em.textContent=iu+h+(parts.length?'（'+parts.join('・')+'）':'')}};q('p_ff','ff',1);q('p_hf','hf',1);q('p_fob','fob');q('p_taxi','taxi')}catch(e){};loadGeo();renderStrip();renderWx();renderDep();renderEnr();renderArr();renderAlt();renderFpl();renderFms();renderAtc();renderChk();renderSum()}
 
 /* ---------- inputs ---------- */
 function norm(v){return (v||'').trim().toUpperCase().slice(0,4)}
@@ -3480,7 +3541,7 @@ function airacCheck(){const today=new Date().toISOString().slice(0,10);
 load();bind();navInit();airacCheck();show(S.tab||(S.route.dep&&S.route.dst?'sum':'route'));renderAll();try{decoHeadings();let _dh=0;new MutationObserver(()=>{if(_dh)return;_dh=requestAnimationFrame(()=>{_dh=0;decoHeadings()})}).observe(document.body,{childList:true,subtree:true})}catch(e){}if(S.wxPoll)wxPollSet(1);
 </script>
 <script>
-window.APPV='20261107095956';
+window.APPV='20261107100718';
 (function(){const a=document.querySelector('.airac');if(a){const s=document.createElement('span');s.className='appv';const v=window.APPV;s.textContent=' · アプリ版 '+v.slice(4,6)+'/'+v.slice(6,8)+' '+v.slice(8,10)+':'+v.slice(10,12);a.appendChild(s)}})();
 if('serviceWorker' in navigator&&window.isSecureContext){const had=!!navigator.serviceWorker.controller;
   navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!window.__swr){window.__swr=1;location.reload()}});
