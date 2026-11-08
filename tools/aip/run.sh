@@ -17,4 +17,5 @@ python3 "$D/embed.py"
 python3 "$D/apply_sid.py"    # runway fill for SIDs in DB
 python3 "$D/render_charts.py"
 python3 "$D/embed.py"        # CHX + AIRAC after charts
+python3 "$D/fixups.py"       # manual corrections (split combined charts etc.)
 python3 "$D/report.py"
