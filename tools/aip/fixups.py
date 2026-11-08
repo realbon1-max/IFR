@@ -53,3 +53,15 @@ for i, c in enumerate(L):
         if len(c) > 3: a[3] = txt[:cut]; b[3] = txt[cut:]
         L[i:i + 1] = [a, b]; put('PLD', pld); break
 open(p, 'w', encoding='utf-8').write(h); print('fixups ok')
+
+# Base turns read from the charts: nav, turn-initiation DME, outbound and inbound courses (MAG).
+import re as _re
+h = open(p, encoding='utf-8').read()
+BT = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'bt_chart.json')))
+db, _, _ = get('DB'); ns = lambda s: _re.sub(r'\s+', '', s).upper(); n = 0
+for k, v in BT.items():
+    if k.startswith('_'): continue
+    a, nm = k.split('|', 1)
+    for q in db.get(a, {}).get('iac', []):
+        if ns(q['n']) == ns(nm): q['bt'] = [v[0], v[1]]; q['btc'] = [v[2], v[3]]; n += 1
+put('DB', db); open(p, 'w', encoding='utf-8').write(h); print('base turns from charts', n)
