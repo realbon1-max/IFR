@@ -797,5 +797,119 @@
 11.0,
 142,
 337
+],
+"RJCC|VOR A": [
+"CHE",
+14.0,
+166,
+1
+],
+"RJCC|VOR RWY19L": [
+"CHE",
+14.0,
+26,
+191
+],
+"RJCC|VOR RWY19R": [
+"CHE",
+14.0,
+26,
+191
+],
+"RJCJ|VOR NR1 RWY36R": [
+"CHE",
+25.0,
+161,
+1
+],
+"RJCJ|VOR_DME NR1 RWY18L": [
+"CHE",
+25.0,
+23,
+183
+],
+"RJCO|VOR RWY14": [
+"SPE",
+7.0,
+350,
+150
+],
+"RJCO|VOR RWY32": [
+"SPE",
+12.0,
+130,
+324
+],
+"RJEO|VOR RWY13": [
+"ORE",
+8.0,
+284,
+124
+],
+"RJEO|VOR RWY31": [
+"ORE",
+8.0,
+163,
+323
+],
+"RJTH|VOR A  For RWY26": [
+"HCE",
+14.0,
+65,
+230
+],
+"RJTH|VOR B  For RWY08": [
+"HCE",
+14.0,
+228,
+63
+],
+"RJTQ|VOR B": [
+"MOE",
+14.0,
+222,
+27
+],
+"RJFK|VOR RWY34": [
+"KGE",
+12.0,
+145,
+340
+],
+"RJFR|ILS Z or LOC Z RWY18": [
+"SWE",
+12.0,
+18,
+178
+],
+"RJFR|LOC Y RWY18": [
+"SWE",
+10.0,
+22,
+178
+],
+"RJFR|VOR B": [
+"SWE",
+9.0,
+74,
+274
+],
+"RJFR|VOR RWY18": [
+"SWE",
+9.0,
+36,
+196
+],
+"RJFS|VOR C": [
+"SGE",
+7.0,
+194,
+14
+],
+"RORK|VOR Z RWY03": [
+"MDE",
+8.0,
+241,
+38
 ]
 }

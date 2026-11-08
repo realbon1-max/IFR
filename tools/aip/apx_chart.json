@@ -1,0 +1,1422 @@
+{
+"_note": "Approach paths read from the AIP charts. fix defs: [R,nav,radial,dme] | [T,rwy,magBrgFromThr,nm] | [F,fix,magBrg,nm]. path tokens: fix | ARC:nav:R/L (clockwise/counter) | THR. fc = final course (MAG) for circling.",
+"RJCJ|VOR NR2 RWY36R": {
+"fix": {
+"KOMAI": [
+"R",
+"CHE",
+181,
+16.0
+]
+},
+"path": [
+"KOMAI",
+"CHE"
+],
+"roles": {
+"KOMAI": "IAF"
+}
+},
+"RJCJ|VOR_DME NR2 RWY18L": {
+"fix": {
+"WAKSA": [
+"R",
+"CHE",
+3,
+17.7
+],
+"CHE12": [
+"R",
+"CHE",
+3,
+12.0
+]
+},
+"path": [
+"WAKSA",
+"CHE12",
+"THR"
+],
+"roles": {
+"WAKSA": "IAF"
+}
+},
+"RJEO|VOR A": {
+"fix": {
+"MAIKA": [
+"R",
+"ORE",
+115,
+25.0
+]
+},
+"path": [
+"MAIKA",
+"ORE"
+],
+"roles": {
+"MAIKA": "IAF"
+},
+"fc": 295
+},
+"RJSM|HI-ILS Y or LOC Y RWY10": {
+"fix": {
+"WEASL": [
+"R",
+"MIS",
+283,
+13.5
+],
+"NADDY": [
+"R",
+"MIS",
+283,
+9.1
+],
+"HOSHI": [
+"R",
+"MIS",
+283,
+5.6
+]
+},
+"path": [
+"WEASL",
+"NADDY",
+"HOSHI",
+"THR"
+],
+"roles": {
+"WEASL": "IAF",
+"NADDY": "FAF"
+}
+},
+"RJSM|HI-ILS Y or LOC Y RWY28": {
+"fix": {
+"SHOJU": [
+"R",
+"MIS",
+200,
+20
+],
+"CHELL": [
+"R",
+"MIS",
+200,
+15
+],
+"BITPY": [
+"R",
+"MIS",
+135,
+15
+],
+"DEVLS": [
+"R",
+"MIS",
+103,
+15
+],
+"GABII": [
+"R",
+"MIS",
+103,
+7.2
+]
+},
+"path": [
+"SHOJU",
+"CHELL",
+"ARC:MIS:L",
+"BITPY",
+"ARC:MIS:L",
+"DEVLS",
+"GABII",
+"THR"
+],
+"roles": {
+"SHOJU": "IAF",
+"DEVLS": "IF",
+"GABII": "FAF"
+}
+},
+"RJSM|HI-ILS Z or LOC Z RWY10": {
+"fix": {
+"SHOJU": [
+"R",
+"MIS",
+200,
+20
+],
+"CHELL": [
+"R",
+"MIS",
+200,
+15
+],
+"UBESE": [
+"R",
+"MIS",
+283,
+15
+],
+"LIFTY": [
+"R",
+"MIS",
+283,
+13
+],
+"KASHH": [
+"R",
+"MIS",
+283,
+11
+],
+"KLYBR": [
+"R",
+"MIS",
+283,
+5
+]
+},
+"path": [
+"SHOJU",
+"CHELL",
+"ARC:MIS:R",
+"UBESE",
+"LIFTY",
+"KASHH",
+"KLYBR",
+"THR"
+],
+"roles": {
+"SHOJU": "IAF",
+"KASHH": "IF",
+"KLYBR": "FAF"
+}
+},
+"RJSM|HI-VOR Y or TACAN Y RWY10": {
+"fix": {
+"SHOJU": [
+"R",
+"MIS",
+200,
+20
+],
+"CHELL": [
+"R",
+"MIS",
+200,
+15
+],
+"KENII": [
+"R",
+"MIS",
+281,
+15
+],
+"HAMAV": [
+"R",
+"MIS",
+281,
+9
+],
+"HABIX": [
+"R",
+"MIS",
+281,
+7
+]
+},
+"path": [
+"SHOJU",
+"CHELL",
+"ARC:MIS:R",
+"KENII",
+"HAMAV",
+"HABIX",
+"THR"
+],
+"roles": {
+"SHOJU": "IAF",
+"KENII": "IF",
+"HABIX": "FAF"
+}
+},
+"RJSM|HI-VOR Y or TACAN Y RWY28": {
+"fix": {
+"SHOJU": [
+"R",
+"MIS",
+200,
+20
+],
+"CHELL": [
+"R",
+"MIS",
+200,
+15
+],
+"BITPY": [
+"R",
+"MIS",
+135,
+15
+],
+"KUJII": [
+"R",
+"MIS",
+110,
+15
+],
+"TAZWA": [
+"R",
+"MIS",
+110,
+6
+]
+},
+"path": [
+"SHOJU",
+"CHELL",
+"ARC:MIS:L",
+"BITPY",
+"ARC:MIS:L",
+"KUJII",
+"TAZWA",
+"THR"
+],
+"roles": {
+"SHOJU": "IAF",
+"KUJII": "IF",
+"TAZWA": "FAF"
+}
+},
+"RJSM|ILS Z or LOC Z RWY28": {
+"fix": {
+"GABII": [
+"R",
+"MIS",
+103,
+7.2
+],
+"DEVLS": [
+"R",
+"MIS",
+103,
+15
+]
+},
+"path": [
+"GABII",
+"DEVLS",
+"GABII",
+"THR"
+],
+"roles": {
+"GABII": "IAF"
+}
+},
+"RJSM|RNAV(GPS) RWY10": {
+"fix": {
+"MESAL": [
+"T",
+"10",
+283,
+3.9
+],
+"DUKER": [
+"T",
+"10",
+283,
+9.9
+],
+"ELKID": [
+"F",
+"DUKER",
+193,
+10
+]
+},
+"path": [
+"ELKID",
+"DUKER",
+"MESAL",
+"THR"
+],
+"roles": {
+"ELKID": "IAF",
+"DUKER": "IF",
+"MESAL": "FAF"
+}
+},
+"RJSM|RNAV(GPS) RWY28": {
+"fix": {
+"GABII": [
+"R",
+"MIS",
+103,
+7.2
+],
+"DEVLS": [
+"R",
+"MIS",
+103,
+15
+]
+},
+"path": [
+"DEVLS",
+"GABII",
+"THR"
+],
+"roles": {
+"DEVLS": "IAF",
+"GABII": "FAF"
+}
+},
+"RJSM|VOR Z or TACAN Z RWY28": {
+"fix": {
+"KUJII": [
+"R",
+"MIS",
+110,
+15
+],
+"TAZWA": [
+"R",
+"MIS",
+110,
+6
+]
+},
+"path": [
+"KUJII",
+"TAZWA",
+"THR"
+],
+"roles": {
+"KUJII": "IAF",
+"TAZWA": "FAF"
+}
+},
+"RJAZ|RNP RWY29": {
+"fix": {
+"KOUGA": [
+"L",
+34.3481,
+139.27125
+],
+"TENJO": [
+"L",
+34.28268,
+139.32402
+],
+"AZ950": [
+"L",
+34.1825,
+139.32361
+],
+"TAKOU": [
+"L",
+34.18274,
+139.22315
+],
+"AZ951": [
+"L",
+34.18285,
+139.16288
+]
+},
+"path": [
+"KOUGA",
+"TENJO",
+"AZ950",
+"TAKOU",
+"AZ951"
+],
+"roles": {
+"KOUGA": "IAF",
+"AZ950": "IF",
+"TAKOU": "FAF"
+}
+},
+"RJTJ|HI-TACAN RWY 17": {
+"fix": {
+"JOSHU": [
+"R",
+"YLT",
+340,
+30
+],
+"YLT8N": [
+"R",
+"YLT",
+340,
+8
+]
+},
+"path": [
+"JOSHU",
+"YLT8N",
+"THR"
+],
+"roles": {
+"JOSHU": "IAF",
+"YLT8N": "FAF"
+}
+},
+"RJTJ|HI-TACAN RWY 35": {
+"fix": {
+"TOMEI": [
+"R",
+"YLT",
+180,
+30
+],
+"YLT20S": [
+"R",
+"YLT",
+172,
+20
+],
+"YLT8S": [
+"R",
+"YLT",
+172,
+8
+]
+},
+"path": [
+"TOMEI",
+"YLT20S",
+"YLT8S",
+"THR"
+],
+"roles": {
+"TOMEI": "IAF",
+"YLT8S": "FAF"
+}
+},
+"RJTJ|TACAN RWY 17": {
+"fix": {
+"OGAWA": [
+"R",
+"YLT",
+340,
+15
+],
+"YLT8N": [
+"R",
+"YLT",
+340,
+8
+]
+},
+"path": [
+"OGAWA",
+"YLT8N",
+"THR"
+],
+"roles": {
+"OGAWA": "IAF",
+"YLT8N": "FAF"
+}
+},
+"RJTJ|TACAN RWY 35": {
+"fix": {
+"KANAI": [
+"R",
+"YLT",
+172,
+15
+],
+"YLT8S": [
+"R",
+"YLT",
+172,
+8
+]
+},
+"path": [
+"KANAI",
+"YLT8S",
+"THR"
+],
+"roles": {
+"KANAI": "IAF",
+"YLT8S": "FAF"
+}
+},
+"RJTK|TACAN RWY02": {
+"fix": {
+"AMAHA": [
+"R",
+"KZT",
+188,
+11.0
+],
+"EGAWA": [
+"R",
+"KZT",
+188,
+6.0
+]
+},
+"path": [
+"AMAHA",
+"EGAWA",
+"THR"
+],
+"roles": {
+"AMAHA": "IF",
+"EGAWA": "FAF"
+}
+},
+"RJTQ|VOR A": {
+"fix": {
+"RASYA": [
+"R",
+"MOE",
+134,
+17.0
+],
+"MOE134D15": [
+"R",
+"MOE",
+134,
+15.0
+],
+"MOE025D15": [
+"R",
+"MOE",
+25,
+15.0
+],
+"CANON": [
+"R",
+"MOE",
+25,
+10.0
+],
+"MOE025D4": [
+"R",
+"MOE",
+25,
+4.0
+]
+},
+"path": [
+"RASYA",
+"MOE134D15",
+"ARC:MOE:L",
+"MOE025D15",
+"CANON",
+"MOE025D4"
+],
+"roles": {
+"RASYA": "IAF",
+"CANON": "FAF"
+},
+"fc": 205
+},
+"RJTY|HI-ILS Y or LOC Y RWY18": {
+"fix": {
+"IMOTU": [
+"R",
+"YOK",
+280,
+15
+],
+"ULENI": [
+"R",
+"YOK",
+357,
+15
+],
+"SETEE": [
+"R",
+"YOK",
+357,
+10
+],
+"STRAZ": [
+"R",
+"YOK",
+357,
+5.9
+]
+},
+"path": [
+"IMOTU",
+"ARC:YOK:R",
+"ULENI",
+"SETEE",
+"STRAZ",
+"THR"
+],
+"roles": {
+"IMOTU": "IAF",
+"ULENI": "IF",
+"STRAZ": "FAF"
+}
+},
+"RJTY|HI-ILS Y or LOC Y RWY36": {
+"fix": {
+"IMOTU": [
+"R",
+"YOK",
+280,
+15
+],
+"OKURA": [
+"R",
+"YOK",
+178,
+15
+],
+"JENEL": [
+"R",
+"YOK",
+178,
+7.8
+]
+},
+"path": [
+"IMOTU",
+"ARC:YOK:L",
+"OKURA",
+"JENEL",
+"THR"
+],
+"roles": {
+"IMOTU": "IAF",
+"OKURA": "IF",
+"JENEL": "FAF"
+}
+},
+"RJTY|ILS Z or LOC Z RWY18": {
+"fix": {
+"ULENI": [
+"R",
+"YOK",
+357,
+15
+],
+"SETEE": [
+"R",
+"YOK",
+357,
+10
+],
+"STRAZ": [
+"R",
+"YOK",
+357,
+5.9
+]
+},
+"path": [
+"ULENI",
+"SETEE",
+"STRAZ",
+"THR"
+],
+"roles": {
+"ULENI": "IAF",
+"STRAZ": "FAF"
+}
+},
+"RJTY|ILS Z or LOC Z RWY36": {
+"fix": {
+"OKURA": [
+"R",
+"YOK",
+178,
+15
+],
+"JENEL": [
+"R",
+"YOK",
+178,
+7.8
+],
+"BURTE": [
+"R",
+"YOK",
+178,
+4
+]
+},
+"path": [
+"OKURA",
+"JENEL",
+"BURTE",
+"THR"
+],
+"roles": {
+"OKURA": "IAF",
+"JENEL": "FAF"
+}
+},
+"RJTY|RNAV(GPS) RWY18": {
+"fix": {
+"BODAI": [
+"T",
+"18",
+357,
+15.0
+],
+"RISSA": [
+"T",
+"18",
+357,
+6.0
+],
+"HANIV": [
+"T",
+"18",
+357,
+2.5
+]
+},
+"path": [
+"BODAI",
+"RISSA",
+"HANIV",
+"THR"
+],
+"roles": {
+"BODAI": "IAF",
+"RISSA": "FAF"
+}
+},
+"RJTY|RNAV(GPS) RWY36": {
+"fix": {
+"MESTR": [
+"T",
+"36",
+177,
+14.0
+],
+"KARMN": [
+"T",
+"36",
+177,
+6.0
+],
+"FONUD": [
+"T",
+"36",
+177,
+3.1
+],
+"WHILY": [
+"F",
+"MESTR",
+91,
+8.6
+]
+},
+"path": [
+"WHILY",
+"MESTR",
+"KARMN",
+"FONUD",
+"THR"
+],
+"roles": {
+"WHILY": "IAF",
+"MESTR": "IF",
+"KARMN": "FAF"
+}
+},
+"RJNG|TACAN RWY28": {
+"fix": {
+"MEIHO": [
+"R",
+"GFT",
+356,
+13
+],
+"GFT095D13": [
+"R",
+"GFT",
+95,
+13
+],
+"KANII": [
+"R",
+"GFT",
+95,
+10
+],
+"GFT095D7": [
+"R",
+"GFT",
+95,
+7
+]
+},
+"path": [
+"MEIHO",
+"ARC:GFT:R",
+"GFT095D13",
+"KANII",
+"GFT095D7",
+"THR"
+],
+"roles": {
+"MEIHO": "IAF",
+"KANII": "IF",
+"GFT095D7": "FAF"
+}
+},
+"RJOI|ILS or LOC RWY02": {
+"fix": {
+"MUTHA": [
+"T",
+"02",
+194,
+13.0
+],
+"MOOOE": [
+"T",
+"02",
+194,
+10.4
+],
+"BUCKI": [
+"T",
+"02",
+194,
+7.2
+],
+"TAMER": [
+"T",
+"02",
+194,
+5.0
+]
+},
+"path": [
+"MUTHA",
+"MOOOE",
+"BUCKI",
+"TAMER",
+"THR"
+],
+"roles": {
+"MUTHA": "IAF",
+"BUCKI": "FAF"
+}
+},
+"RJOI|RNAV (GPS) RWY02": {
+"fix": {
+"PPOPS": [
+"T",
+"02",
+195,
+14.8
+],
+"TAZZZ": [
+"T",
+"02",
+195,
+9.8
+],
+"STYNE": [
+"T",
+"02",
+195,
+6.0
+],
+"ORLFD": [
+"T",
+"02",
+195,
+3.1
+]
+},
+"path": [
+"PPOPS",
+"TAZZZ",
+"STYNE",
+"ORLFD",
+"THR"
+],
+"roles": {
+"PPOPS": "IAF",
+"TAZZZ": "FAF"
+}
+},
+"RJOS|TACAN A": {
+"fix": {
+"ENSES": [
+"R",
+"TSC",
+140,
+20
+],
+"TSC140D13": [
+"R",
+"TSC",
+140,
+13
+],
+"INVUX": [
+"R",
+"TSC",
+115,
+13
+],
+"OTKEV": [
+"R",
+"TSC",
+115,
+5
+],
+"TSC115D1": [
+"R",
+"TSC",
+115,
+1
+]
+},
+"path": [
+"ENSES",
+"TSC140D13",
+"ARC:TSC:L",
+"INVUX",
+"OTKEV",
+"TSC115D1"
+],
+"roles": {
+"ENSES": "IAF",
+"INVUX": "IF",
+"OTKEV": "FAF"
+},
+"fc": 295
+},
+"RJFC|VOR RWY32": {
+"fix": {
+"CEDAR": [
+"R",
+"YKE",
+127,
+8.0
+]
+},
+"path": [
+"CEDAR",
+"THR"
+],
+"roles": {
+"CEDAR": "IAF"
+}
+},
+"RJFN|ILS X or LOC X RWY28": {
+"fix": {
+"NHT109D10": [
+"R",
+"NHT",
+109,
+10
+],
+"NHT109D59": [
+"R",
+"NHT",
+109,
+5.9
+]
+},
+"path": [
+"NHT109D10",
+"NHT109D59",
+"THR"
+],
+"roles": {
+"NHT109D59": "FAF"
+}
+},
+"RJFN|ILS Y or LOC Y RWY28": {
+"fix": {
+"HYUGA": [
+"R",
+"NHT",
+91,
+30
+],
+"NHT094D23": [
+"R",
+"NHT",
+94,
+23
+],
+"NHT109D15": [
+"R",
+"NHT",
+109,
+15
+],
+"NHT109D8": [
+"R",
+"NHT",
+109,
+8
+],
+"NHT109D59": [
+"R",
+"NHT",
+109,
+5.9
+]
+},
+"path": [
+"HYUGA",
+"NHT094D23",
+"NHT109D15",
+"NHT109D8",
+"NHT109D59",
+"THR"
+],
+"roles": {
+"HYUGA": "IAF",
+"NHT109D59": "FAF"
+}
+},
+"RJFR|VOR A": {
+"fix": {
+"ASARI": [
+"R",
+"SWE",
+84,
+9.5
+],
+"SWE084D1": [
+"R",
+"SWE",
+84,
+1.0
+]
+},
+"path": [
+"ASARI",
+"SWE084D1"
+],
+"roles": {
+"ASARI": "IAF"
+},
+"fc": 264
+},
+"RJFS|VOR A": {
+"fix": {
+"MILEP": [
+"R",
+"SGE",
+194,
+16.2
+],
+"UGAMU": [
+"R",
+"SGE",
+194,
+11.6
+],
+"SGE194D12": [
+"R",
+"SGE",
+194,
+1.2
+]
+},
+"path": [
+"MILEP",
+"UGAMU",
+"SGE194D12"
+],
+"roles": {
+"MILEP": "IAF",
+"UGAMU": "FAF"
+},
+"fc": 14
+},
+"RODN|ILS or LOC RWY05L": {
+"fix": {
+"IDMEK": [
+"R",
+"KAD",
+235,
+20
+],
+"EBLIR": [
+"R",
+"KAD",
+235,
+13
+],
+"DUPIT": [
+"R",
+"KAD",
+235,
+7
+]
+},
+"path": [
+"IDMEK",
+"EBLIR",
+"DUPIT",
+"THR"
+],
+"roles": {
+"IDMEK": "IAF",
+"EBLIR": "IF",
+"DUPIT": "FAF"
+}
+},
+"RODN|ILS or LOC RWY23R": {
+"fix": {
+"IMONO": [
+"R",
+"KAD",
+55,
+20
+],
+"LETOX": [
+"R",
+"KAD",
+55,
+13
+],
+"NUGAP": [
+"R",
+"KAD",
+55,
+6.9
+]
+},
+"path": [
+"IMONO",
+"LETOX",
+"NUGAP",
+"THR"
+],
+"roles": {
+"IMONO": "IAF",
+"LETOX": "IF",
+"NUGAP": "FAF"
+}
+},
+"RODN|RNAV (GPS) RWY05L": {
+"fix": {
+"ADYEK": [
+"T",
+"05L",
+235,
+19.9
+],
+"CIRUG": [
+"T",
+"05L",
+232,
+12.8
+],
+"WITOT": [
+"T",
+"05L",
+236,
+6.8
+]
+},
+"path": [
+"ADYEK",
+"CIRUG",
+"WITOT",
+"THR"
+],
+"roles": {
+"ADYEK": "IAF",
+"CIRUG": "IF",
+"WITOT": "FAF"
+}
+},
+"RODN|RNAV (GPS) RWY05R": {
+"fix": {
+"ADYEK": [
+"T",
+"05R",
+235,
+20.0
+],
+"CIRUG": [
+"T",
+"05R",
+235,
+12.9
+],
+"COUCH": [
+"T",
+"05R",
+235,
+6.8
+]
+},
+"path": [
+"ADYEK",
+"CIRUG",
+"COUCH",
+"THR"
+],
+"roles": {
+"ADYEK": "IAF",
+"CIRUG": "IF",
+"COUCH": "FAF"
+}
+},
+"RODN|RNAV (GPS) RWY23L": {
+"fix": {
+"BYYRD": [
+"T",
+"23L",
+55,
+18.2
+],
+"CITIK": [
+"T",
+"23L",
+55,
+12.0
+],
+"CEBIT": [
+"T",
+"23L",
+55,
+6.0
+]
+},
+"path": [
+"BYYRD",
+"CITIK",
+"CEBIT",
+"THR"
+],
+"roles": {
+"BYYRD": "IAF",
+"CITIK": "IF",
+"CEBIT": "FAF"
+}
+},
+"RODN|RNAV (GPS) RWY23R": {
+"fix": {
+"BYYRD": [
+"T",
+"23R",
+55,
+18.3
+],
+"CITIK": [
+"T",
+"23R",
+57,
+12.1
+],
+"MISAE": [
+"T",
+"23R",
+55,
+6.0
+]
+},
+"path": [
+"BYYRD",
+"CITIK",
+"MISAE",
+"THR"
+],
+"roles": {
+"BYYRD": "IAF",
+"CITIK": "IF",
+"MISAE": "FAF"
+}
+},
+"RODN|VOR or TACAN RWY05L": {
+"fix": {
+"IDMEK": [
+"R",
+"KAD",
+235,
+20
+],
+"ALSUR": [
+"R",
+"KAD",
+238,
+13
+],
+"AKKIO": [
+"R",
+"KAD",
+238,
+8
+],
+"BONOV": [
+"R",
+"KAD",
+238,
+7
+]
+},
+"path": [
+"IDMEK",
+"ALSUR",
+"AKKIO",
+"BONOV",
+"THR"
+],
+"roles": {
+"IDMEK": "IAF",
+"ALSUR": "IF",
+"AKKIO": "FAF"
+}
+},
+"RODN|VOR or TACAN RWY05R": {
+"fix": {
+"IDMEK": [
+"R",
+"KAD",
+235,
+20
+],
+"AVOLA": [
+"R",
+"KAD",
+230,
+13
+],
+"DOWNM": [
+"R",
+"KAD",
+230,
+8
+],
+"TADIR": [
+"R",
+"KAD",
+230,
+7
+]
+},
+"path": [
+"IDMEK",
+"AVOLA",
+"DOWNM",
+"TADIR",
+"THR"
+],
+"roles": {
+"IDMEK": "IAF",
+"AVOLA": "IF",
+"DOWNM": "FAF"
+}
+}
+}
