@@ -10,4 +10,4 @@
 ## 気象
 `.github/workflows/wx.yml` が10分ごとに全127飛行場の METAR/TAF（気象庁発表の報を NOAA Aviation Weather Center が中継したもの）を取得し、`wx` ブランチの `wx.json` に置きます。アプリはこれを読み、MetAir から貼り付けた報があればそちらを優先します。自動取得の報は参考です。
 
-運航の判断は必ず MetAir・最新の AIP / NOTAM・公式チャートで行ってください。航空路誌データは AIRAC 2026-10-01 版。
+運航の判断は必ず MetAir・最新の AIP / NOTAM・公式チャートで行ってください。航空路誌データは AIRAC 2026-10-29 版。
