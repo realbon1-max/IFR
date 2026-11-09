@@ -15,16 +15,16 @@ for a,dt in todo.items():
     import shutil
     if os.path.isdir(f'{out}/{a}'): shutil.rmtree(f'{out}/{a}')
     for f in sorted(os.listdir(f'{root}/{a}__{dt}')):
-        m=re.match(r'\w{4}__\s*(SID ?- ?[Ii]nstrument|SID|STAR|IAC)\s*(?:\((.*?)\)?|(-\d+))?\s*(?:＊)?_\d{8}\.pdf$',f.replace('＊',''))
+        m=re.match(r'\w{4}__\s*(SID ?- ?[Ii]nstrument|SID|STAR|IAC|ADC|APDC|GMC)\s*(?:\((.*?)\)?|(-\s*\d+))?\s*(?:＊)?_\d{8}\.pdf$',f.replace('＊',''))
         if not m: continue
-        kind='SID' if m.group(1).startswith('SID') else 'STAR' if m.group(1)=='STAR' else 'APP'
-        short=(m.group(2) or '').strip()
+        kind='SID' if m.group(1).startswith('SID') else 'STAR' if m.group(1)=='STAR' else 'AD' if m.group(1) in ('ADC','APDC','GMC') else 'APP'
+        short=(m.group(2) or '').strip() if kind!='AD' else (m.group(1)+' '+(m.group(3) or '').replace(' ','')).strip()
         jobs.append((a,kind,short,f'{root}/{a}__{dt}/{f}'))
 def job(j):
     a,kind,short,p=j
     slug=re.sub(r'[^A-Za-z0-9]+','_',f'{kind}_{short}').strip('_')[:60]+'_'+hashlib.md5(p.encode()).hexdigest()[:4]
     os.makedirs(f'{out}/{a}',exist_ok=True);tmp=os.path.join(os.environ['WORK'],'tmp',f'{a}_{slug}')
-    os.makedirs(os.path.dirname(tmp),exist_ok=True);subprocess.run(['pdftoppm','-r','140','-gray','-png',p,tmp],stderr=subprocess.DEVNULL)
+    os.makedirs(os.path.dirname(tmp),exist_ok=True);subprocess.run(['pdftoppm','-r','190' if kind=='AD' else '140','-gray','-png',p,tmp],stderr=subprocess.DEVNULL)
     fs=[]
     for k in range(1,9):
         cand=[x for x in [f'{tmp}-{k}.png',f'{tmp}-0{k}.png'] if os.path.exists(x)]
