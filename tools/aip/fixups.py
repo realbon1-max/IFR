@@ -120,21 +120,74 @@ for k, v in APX.items():
             rw = next(x for x in A['rw'] if x['id'] == d[1]); r = dest(rw.get('t') or A['p'], (d[2] + mv) % 360, d[3])
         elif t == 'F': r = dest(pos(d[1]), (d[2] + mv) % 360, d[3])
         P[f] = r; return r
+    def tokpos(t):
+        if t.startswith('R/'):
+            _, nv, rd, dd = t.split('/'); c = F.get(nv) or pcd.get(a, {}).get(nv); return dest([c[0], c[1]], (float(rd) + mv) % 360, float(dd))
+        return pos(t)
     pts = []; toks = v['path']
     for i, t in enumerate(toks):
         if t == 'THR':
             rw = next((x for x in A['rw'] if x['id'] == q.get('rw')), None); pts.append(rw.get('t') or A['p'] if rw else A['p']); continue
         if t.startswith('ARC:'):
-            _, nv, d = t.split(':'); c = [F[nv][0], F[nv][1]]; p0 = pts[-1]; p1 = pos(toks[i + 1]); R = _dist(c, p0)
+            _, nv, d = t.split(':'); c = [F[nv][0], F[nv][1]]; p0 = pts[-1]; p1 = tokpos(toks[i + 1]); R = _dist(c, p0)
             b0 = _brg(c, p0); b1 = _brg(c, p1); sw = (b1 - b0) % 360 if d == 'R' else -((b0 - b1) % 360)
             for j in range(1, 24): pts.append(dest(c, (b0 + sw * j / 24) % 360, R))
             continue
-        pts.append(pos(t))
+        pts.append(tokpos(t))
     for f in v['fix']:
         if f not in F: pcd.setdefault(a, {})[f] = [round(x, 5) for x in pos(f)]
     q['cpl'] = [[round(x[0], 5), round(x[1], 5)] for x in pts]
-    q['r'] = {}
-    for f, r in v.get('roles', {}).items(): q['r'].setdefault(r, []).append(f)
+    if v.get('roles'):
+        q['r'] = {}
+        for f, r in v['roles'].items(): q['r'].setdefault(r, []).append(f)
+    else:
+        names = [t for t in toks if t != 'THR' and not t.startswith(('ARC:', 'R/'))]
+        R = {k: [f for f in L if f in names] for k, L in (q.get('r') or {}).items()}
+        R = {k: L for k, L in R.items() if L}
+        if names:
+            for k in list(R): R[k] = [f for f in R[k] if not (k != 'IAF' and f == names[0])] or R[k]
+            R['IAF'] = [names[0]]
+        q['r'] = {k: L for k, L in R.items() if L}
     if v.get('fc') is not None: q['fc'] = v['fc']
     q.pop('bt', None); q.pop('btc', None); n += 1
 put('DB', db); put('PCD', pcd); open(p, 'w', encoding='utf-8').write(h); print('chart paths', n)
+
+# Missed approach paths read from the charts (ma_chart.json) -> q['mapl']
+h = open(p, encoding='utf-8').read()
+MA = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ma_chart.json')))
+db, _, _ = get('DB'); pcd, _, _ = get('PCD'); nav, _, _ = get('NAV'); F = nav['F']; n = 0; miss = []
+def fx(a, f):
+    c = F.get(f) or pcd.get(a, {}).get(f)
+    if not c:
+        for v in pcd.values():
+            if f in v: c = v[f]; break
+    return [c[0], c[1]] if c else None
+for k, toks in MA.items():
+    if k.startswith('_'): continue
+    a, nm = k.split('|', 1); A = db.get(a)
+    q = next((q for q in (A or {}).get('iac', []) if ns(q['n']) == ns(nm)), None)
+    if not q: miss.append(k); continue
+    mv = A.get('mv', -8) or -8; pts = []; ok = True
+    for i, t in enumerate(toks):
+        s = t.split('/')
+        if t == 'MAP':
+            rw = next((x for x in A['rw'] if x['id'] == q.get('rw')), None)
+            pts.append(q['cpl'][-1] if q.get('cpl') else (rw.get('t') if rw and rw.get('t') else A['p']))
+        elif s[0] == 'R':
+            c = fx(a, s[1]); d = s[3]
+            if not c: ok = False; miss.append(k + ' ' + t); break
+            dd = _dist(c, pts[-1]) + float(d[1:]) if d.startswith('+') else float(d)
+            pts.append(dest(c, (float(s[2]) + mv) % 360, dd))
+        elif s[0] == 'H': pts.append(dest(pts[-1], (float(s[1]) + mv) % 360, float(s[2])))
+        elif s[0] == 'L': pts.append([float(s[1]), float(s[2])])
+        elif s[0] == 'ARC':
+            c = fx(a, s[1]); p0 = pts[-1]; nt = toks[i + 1].split('/')
+            p1 = dest(fx(a, nt[1]), (float(nt[2]) + mv) % 360, float(nt[3])) if nt[0] == 'R' else fx(a, toks[i + 1])
+            R = _dist(c, p0); b0 = _brg(c, p0); b1 = _brg(c, p1); sw = (b1 - b0) % 360 if s[2] == 'R' else -((b0 - b1) % 360)
+            for j in range(1, 24): pts.append(dest(c, (b0 + sw * j / 24) % 360, R))
+        else:
+            c = fx(a, t)
+            if not c: ok = False; miss.append(k + ' ' + t); break
+            pts.append(c)
+    if ok and len(pts) > 1: q['mapl'] = [[round(x[0], 5), round(x[1], 5)] for x in pts]; n += 1
+put('DB', db); open(p, 'w', encoding='utf-8').write(h); print('missed approaches from charts', n, 'problems', miss)

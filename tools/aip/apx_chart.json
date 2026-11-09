@@ -1418,5 +1418,1459 @@
 "AVOLA": "IF",
 "DOWNM": "FAF"
 }
+},
+"RJOI|RNAV (RNP) Z RWY20": {
+"fix": {
+"WK004": [
+"T",
+"20",
+15,
+2.3
+],
+"WK003": [
+"F",
+"WK004",
+45,
+1.6
+],
+"SAGPA": [
+"F",
+"WK003",
+78,
+2.0
+],
+"WK002": [
+"F",
+"SAGPA",
+93,
+1.2
+],
+"WK001": [
+"F",
+"WK002",
+117,
+2.6
+],
+"GURTA": [
+"F",
+"WK001",
+141,
+2.8
+],
+"IPMER": [
+"F",
+"GURTA",
+189,
+5.4
+],
+"LOBRY": [
+"F",
+"GURTA",
+90,
+2.9
+]
+},
+"path": [
+"IPMER",
+"GURTA",
+"WK001",
+"WK002",
+"SAGPA",
+"WK003",
+"WK004",
+"THR"
+],
+"roles": {
+"IPMER": "IAF",
+"GURTA": "IF",
+"SAGPA": "FAF"
+},
+"_approx": "distances from the profile (3deg path), not published coordinates"
+},
+"RJCJ|ILS X RWY36R": {
+"fix": {},
+"path": [
+"ABIRA",
+"ARC:ZYT:R",
+"NOBIG",
+"ARAPA",
+"THR"
+]
+},
+"RJCJ|ILS Y RWY36R": {
+"fix": {},
+"path": [
+"JOMMY",
+"ARC:ZYT:R",
+"R/ZYT/182/20",
+"NOBIG",
+"ARAPA",
+"THR"
+]
+},
+"RJCJ|TACAN Y RWY36R": {
+"fix": {},
+"path": [
+"ABIRA",
+"ARC:ZYT:R",
+"NOBIG",
+"EKOMU",
+"THR"
+]
+},
+"RJCJ|TACAN Z RWY36R": {
+"fix": {},
+"path": [
+"JOMMY",
+"ARC:ZYT:R",
+"R/ZYT/182/20",
+"NOBIG",
+"EKOMU",
+"THR"
+]
+},
+"RJCJ|TACAN Y RWY18L": {
+"fix": {},
+"path": [
+"ABIRA",
+"ARC:ZYT:L",
+"OPANO",
+"OLPOL",
+"THR"
+]
+},
+"RJCJ|TACAN Z RWY18L": {
+"fix": {},
+"path": [
+"JOMMY",
+"ARC:ZYT:L",
+"R/ZYT/2/20",
+"OPANO",
+"OLPOL",
+"THR"
+]
+},
+"RJEC|ILS Y or LOC Y RWY34": {
+"fix": {},
+"path": [
+"ASIBE",
+"R/AWE/220/8.6",
+"ARC:AWE:L",
+"AOIKE",
+"BOUZU",
+"THR"
+]
+},
+"RJEC|ILS Z or LOC Z RWY34": {
+"fix": {},
+"path": [
+"ASIBE",
+"R/AWE/220/8.6",
+"ARC:AWE:L",
+"AOIKE",
+"BOUZU",
+"THR"
+]
+},
+"RJEC|VOR A": {
+"fix": {},
+"path": [
+"ASIBE",
+"R/AWE/220/8.6",
+"ARC:AWE:L",
+"SILGA",
+"ZELBU",
+"AWE"
+]
+},
+"RJEC|VOR B": {
+"fix": {},
+"path": [
+"ASIBE",
+"R/AWE/220/8.6",
+"ARC:AWE:L",
+"SILGA",
+"ZELBU",
+"AWE"
+]
+},
+"RJER|VOR A": {
+"fix": {},
+"path": [
+"ORISU",
+"R/RSE/349/13",
+"ARC:RSE:L",
+"KANRO",
+"RIPPU",
+"RSE"
+]
+},
+"RJER|LOC RWY25": {
+"fix": {},
+"path": [
+"ORISU",
+"R/RSE/349/12",
+"ARC:RSE:R",
+"ENRIT",
+"MILPS",
+"THR"
+]
+},
+"RJSA|VOR RWY24": {
+"fix": {},
+"path": [
+"BYOBU",
+"R/MRE/14/14",
+"ARC:MRE:R",
+"ALDET",
+"NOLAG",
+"THR"
+]
+},
+"RJSC|LOC Z RWY01": {
+"fix": {},
+"path": [
+"IBELU",
+"LAFRA",
+"KAJYO",
+"THR"
+]
+},
+"RJSH|ILS Y RWY25": {
+"fix": {},
+"path": [
+"ENBRY",
+"ARC:HVT:L",
+"OLSOX",
+"ASUDA",
+"THR"
+]
+},
+"RJSH|LOC Y RWY25": {
+"fix": {},
+"path": [
+"ENBRY",
+"ARC:HVT:L",
+"OLSOX",
+"ASUDA",
+"THR"
+]
+},
+"RJSH|TACAN RWY25": {
+"fix": {},
+"path": [
+"ENBRY",
+"ARC:HVT:L",
+"LAPUL",
+"VABLU",
+"THR"
+]
+},
+"RJSR|ILS Z or LOC Z RWY11": {
+"fix": {},
+"path": [
+"BONJI",
+"ARC:ODE:R",
+"ATKES",
+"SAGOM",
+"THR"
+]
+},
+"RJSO|TACAN A": {
+"fix": {},
+"path": [
+"BATTL",
+"R/OMT/206/6",
+"R/OMT/206/1"
+],
+"roles": {
+"BATTL": "IAF"
+},
+"fc": 26
+},
+"RJST|TACAN Y RWY25": {
+"fix": {},
+"path": [
+"MOLLI",
+"R/MXT/360/15",
+"ARC:MXT:R",
+"OLKUN",
+"SEBRO",
+"THR"
+]
+},
+"RJAA|ILS X or LOC X RWY16L": {
+"fix": {},
+"path": [
+"LAKES",
+"ARC:NRE:L",
+"INASY",
+"BIRDY",
+"THR"
+]
+},
+"RJAH|ILS Y RWY03R": {
+"fix": {},
+"path": [
+"TAIYO",
+"R/HUC/81/12",
+"ARC:HUC:R",
+"BUVDI",
+"OVGOB",
+"THR"
+]
+},
+"RJAH|LOC Y RWY03R": {
+"fix": {},
+"path": [
+"TAIYO",
+"R/HUC/81/12",
+"ARC:HUC:R",
+"BUVDI",
+"OVGOB",
+"THR"
+]
+},
+"RJAH|TACAN RWY03L": {
+"fix": {},
+"path": [
+"TAIYO",
+"R/HUC/81/12",
+"ARC:HUC:R",
+"UKDIS",
+"IDKUS",
+"THR"
+]
+},
+"RJAH|TACAN RWY03R": {
+"fix": {},
+"path": [
+"TAIYO",
+"R/HUC/81/12",
+"ARC:HUC:R",
+"NUTRI",
+"IDBIR",
+"THR"
+]
+},
+"RJAH|TACAN RWY21L": {
+"fix": {},
+"path": [
+"TAIYO",
+"R/HUC/81/11",
+"ARC:HUC:L",
+"MAVGO",
+"UKLEV",
+"THR"
+]
+},
+"RJAH|TACAN RWY21R": {
+"fix": {},
+"path": [
+"TAIYO",
+"R/HUC/81/11",
+"ARC:HUC:L",
+"DOTUR",
+"REBIB",
+"THR"
+]
+},
+"RJAH|VOR RWY03L": {
+"fix": {},
+"path": [
+"NAKAH",
+"HUC",
+"R/HUC/116/13",
+"ARC:HUC:R",
+"R/HUC/204/13",
+"R/HUC/204/6.1",
+"THR"
+]
+},
+"RJAH|VOR RWY03R": {
+"fix": {},
+"path": [
+"NAKAH",
+"HUC",
+"R/HUC/116/13",
+"ARC:HUC:R",
+"R/HUC/204/13",
+"R/HUC/204/6.1",
+"THR"
+]
+},
+"RJAZ|RNP RWY11": {
+"fix": {},
+"path": [
+"KOUGA",
+"SENOL",
+"AZ150",
+"ONBAS",
+"THR"
+]
+},
+"RJTA|ILS Y or LOC Y RWY 01": {
+"fix": {},
+"path": [
+"SYONA",
+"ARC:NJA:L",
+"RUMED",
+"PUKUK",
+"THR"
+]
+},
+"RJTA|ILS Z or LOC Z RWY 01": {
+"fix": {},
+"path": [
+"SYONA",
+"ARC:NJA:L",
+"RUMED",
+"PUKUK",
+"THR"
+]
+},
+"RJTA|TACAN RWY 01": {
+"fix": {},
+"path": [
+"SYONA",
+"ARC:NJA:L",
+"ADKET",
+"ESDUS",
+"THR"
+]
+},
+"RJTE|TACAN A": {
+"fix": {},
+"path": [
+"SAPIM",
+"ARC:TET:L",
+"OLSAS",
+"UKAKU",
+"R/TET/160/1"
+],
+"roles": {
+"SAPIM": "IAF",
+"OLSAS": "IF",
+"UKAKU": "FAF"
+},
+"fc": 340
+},
+"RJTL|ILS Y or LOC Y RWY19": {
+"fix": {},
+"path": [
+"TOHNE",
+"ARC:SHT:R",
+"BANDO",
+"JOBAN",
+"THR"
+]
+},
+"RJTL|ILS Z or LOC Z  RWY19": {
+"fix": {},
+"path": [
+"TOHNE",
+"ARC:SHT:R",
+"BANDO",
+"JOBAN",
+"THR"
+]
+},
+"RJTL|TACAN RWY19": {
+"fix": {},
+"path": [
+"TOHNE",
+"ARC:SHT:R",
+"ASEKI",
+"USIKU",
+"THR"
+]
+},
+"RJTT|ILS RWY22": {
+"fix": {},
+"path": [
+"STEAM",
+"NINJA",
+"NEXUS",
+"NITRO",
+"THR"
+]
+},
+"RJTT|ILS X RWY34L": {
+"fix": {},
+"path": [
+"KAIHO",
+"AVION",
+"ALLIE",
+"AZURE",
+"THR"
+]
+},
+"RJTT|ILS Y RWY34L": {
+"fix": {},
+"path": [
+"KAIHO",
+"AVION",
+"ALLIE",
+"AZURE",
+"THR"
+]
+},
+"RJTT|ILS Y or LOC Y RWY23": {
+"fix": {},
+"path": [
+"KAIHO",
+"LD224",
+"LUBBY",
+"GUMIK",
+"THR"
+]
+},
+"RJTT|ILS Z RWY23": {
+"fix": {},
+"path": [
+"STEAM",
+"SNAKE",
+"SMILE",
+"SAROB",
+"THR"
+]
+},
+"RJTT|ILS Z RWY34L": {
+"fix": {},
+"path": [
+"CREAM",
+"ARLON",
+"APOLO",
+"THR"
+]
+},
+"RJTT|ILS Z RWY34R(CAT II & III)": {
+"fix": {},
+"path": [
+"CREAM",
+"CLOAK",
+"CAMEL",
+"CACAO",
+"THR"
+]
+},
+"RJTT|ILS or LOC RWY16L": {
+"fix": {},
+"path": [
+"SANDY",
+"LABAN",
+"LINEN",
+"LORRY",
+"LYCOS",
+"THR"
+]
+},
+"RJTT|ILS or LOC RWY16R": {
+"fix": {},
+"path": [
+"NATTY",
+"RANGY",
+"RESIN",
+"RUGBY",
+"RONIE",
+"THR"
+]
+},
+"RJTT|LDA W RWY22": {
+"fix": {},
+"path": [
+"BACON",
+"BIBLO",
+"BEAST",
+"BONDO",
+"THR"
+]
+},
+"RJTT|LDA W RWY23": {
+"fix": {},
+"path": [
+"DATUM",
+"DARIO",
+"DISCO",
+"DANON",
+"DEANE",
+"DAMBO",
+"THR"
+]
+},
+"RJTT|LDA X RWY22": {
+"fix": {},
+"path": [
+"DATUM",
+"DYUKE",
+"BONUS",
+"BONDO",
+"THR"
+]
+},
+"RJTT|LDA X RWY23": {
+"fix": {},
+"path": [
+"BACON",
+"DOYLE",
+"DAMBO",
+"THR"
+]
+},
+"RJTT|LDA Y RWY22": {
+"fix": {},
+"path": [
+"KAIHO",
+"LD224",
+"BALAN",
+"TAYAS",
+"THR"
+]
+},
+"RJTT|LDA Y RWY23": {
+"fix": {},
+"path": [
+"KAIHO",
+"LD225",
+"LD224",
+"DARKS",
+"DOMEL",
+"THR"
+]
+},
+"RJTT|LDA Z RWY22": {
+"fix": {},
+"path": [
+"BACON",
+"BIBLO",
+"BEAST",
+"BONDO",
+"THR"
+]
+},
+"RJTT|LDA Z RWY23": {
+"fix": {},
+"path": [
+"DATUM",
+"DELCA",
+"DEANE",
+"DAMBO",
+"THR"
+]
+},
+"RJTT|LOC RWY22": {
+"fix": {},
+"path": [
+"STEAM",
+"NINJA",
+"NEXUS",
+"NECTA",
+"THR"
+]
+},
+"RJTT|LOC Y RWY34R": {
+"fix": {},
+"path": [
+"KAIHO",
+"CISCO",
+"CHEIN",
+"THR"
+]
+},
+"RJTT|LOC Z RWY23": {
+"fix": {},
+"path": [
+"STEAM",
+"SNAKE",
+"SMILE",
+"SAVER",
+"THR"
+]
+},
+"RJTT|RNP RWY16R": {
+"fix": {},
+"path": [
+"NATTY",
+"RACER",
+"REMUS",
+"ROWAN",
+"RIPOD",
+"THR"
+]
+},
+"RJTT|VOR A": {
+"fix": {},
+"path": [
+"DARKS",
+"SULUL",
+"R/TTE/94/2.6"
+],
+"fc": 274
+},
+"RJTU|TACAN RWY01": {
+"fix": {},
+"path": [
+"IPNAX",
+"ARC:JDT:R",
+"OBMAP",
+"RINTU",
+"THR"
+]
+},
+"RJNF|RNP RWY18": {
+"fix": {},
+"path": [
+"GOZEN",
+"KAGAR",
+"NF181",
+"THR"
+]
+},
+"RJNH|TACAN RWY 09": {
+"fix": {},
+"path": [
+"EKOVI",
+"ARC:LHT:R",
+"DOGAT",
+"OVTIV",
+"THR"
+]
+},
+"RJNH|TACAN RWY 27": {
+"fix": {},
+"path": [
+"VEPUP",
+"R/LHT/165/13",
+"ARC:LHT:L",
+"VAPLO",
+"GOVSO",
+"THR"
+]
+},
+"RJNK|TACAN Z RWY06": {
+"fix": {},
+"path": [
+"GUGOS",
+"R/KMC/300/15",
+"ARC:KMC:L",
+"SUDOP",
+"ONOSO",
+"THR"
+]
+},
+"RJNW|RNP X RWY07": {
+"fix": {},
+"path": [
+"KILCO",
+"NW770",
+"NW771",
+"NW772",
+"THR"
+]
+},
+"RJNY|TACAN X RWY27": {
+"fix": {},
+"path": [
+"UDOKU",
+"ARC:YZT:L",
+"R/YZT/100/13",
+"IDALU",
+"OKADO",
+"THR"
+]
+},
+"RJNY|TACAN Y RWY27": {
+"fix": {},
+"path": [
+"RILGI",
+"ARC:YZT:R",
+"R/YZT/100/13",
+"IDALU",
+"OKADO",
+"THR"
+]
+},
+"RJBB|ILS Z or LOC Z RWY24L (CAT II": {
+"fix": {},
+"path": [
+"MAYAH",
+"ONEGU",
+"OSNIT",
+"BB452",
+"AMBER",
+"AMEZY",
+"THR"
+]
+},
+"RJBB|VOR RWY24R": {
+"fix": {},
+"path": [
+"MAYAH",
+"ARC:KIE:R",
+"SOOMY",
+"HARKY",
+"THR"
+]
+},
+"RJBD|RNP Y RWY33": {
+"fix": {},
+"path": [
+"MUROH",
+"BD350",
+"BD351",
+"PANDA",
+"BD352",
+"BD353",
+"BD354",
+"THR"
+]
+},
+"RJBE|ILS Y or LOC Y RWY09": {
+"fix": {},
+"path": [
+"SIOJI",
+"PEGDO",
+"THR"
+]
+},
+"RJBT|RNP RWY19": {
+"fix": {},
+"path": [
+"OLSOP",
+"BT950",
+"BT951",
+"BT952",
+"AMARB",
+"BT953",
+"BT954",
+"THR"
+]
+},
+"RJOE|TACAN RWY13": {
+"fix": {},
+"path": [
+"HISAI",
+"OGILA",
+"BITEP",
+"THR"
+]
+},
+"RJOO|VOR A": {
+"fix": {},
+"path": [
+"IKOMA",
+"KYUHO",
+"R/ITE/141/4.4"
+]
+},
+"RJOY|VOR B": {
+"fix": {},
+"path": [
+"IZUMI",
+"OLNOK",
+"R/YOE/229/1"
+]
+},
+"RJDC|RNP Y RWY07": {
+"fix": {},
+"path": [
+"UBE",
+"DC760",
+"DC761",
+"DC762",
+"THR"
+]
+},
+"RJNO|RNP RWY08": {
+"fix": {},
+"path": [
+"SAIGO",
+"NO850",
+"TAKHI",
+"YUICK",
+"THR"
+]
+},
+"RJNO|RNP RWY26": {
+"fix": {},
+"path": [
+"SAIGO",
+"NO650",
+"NO651",
+"JOUDO",
+"DIMAN",
+"THR"
+]
+},
+"RJNO|LOC Y RWY08": {
+"fix": {},
+"path": [
+"DOZEN",
+"ARC:OIE:R",
+"ASAJI",
+"LOSOC",
+"THR"
+]
+},
+"RJOA|RNP RWY28": {
+"fix": {},
+"path": [
+"MONTA",
+"VISTA",
+"BUENA",
+"THR"
+]
+},
+"RJOB|ILS Y RWY07": {
+"fix": {
+"OB791": [
+"L",
+34.66269,
+133.61419
+]
+},
+"path": [
+"INOOK",
+"SARUU",
+"OB791",
+"ASIMO",
+"THR"
+]
+},
+"RJOF|TACAN": {
+"fix": {},
+"path": [
+"NANYO",
+"ARC:FMT:R",
+"ISGIB",
+"VETOS",
+"R/FMT/96/2"
+],
+"fc": 276
+},
+"RJOH|ILS Z or LOC Z RWY25": {
+"fix": {},
+"path": [
+"ATMIK",
+"R/YGE/111/21.8",
+"ARC:YGE:L",
+"R/YGE/97/21.8",
+"GAINA",
+"YUMII",
+"THR"
+]
+},
+"RJOH|TACAN A": {
+"fix": {},
+"path": [
+"MINAT",
+"ARC:JET:R",
+"R/JET/107/12",
+"R/JET/107/9"
+],
+"fc": 287
+},
+"RJOR|RNP X RWY10": {
+"fix": {},
+"path": [
+"TRE",
+"OR054",
+"OR058",
+"OR059",
+"OR060",
+"NASSY",
+"THR"
+]
+},
+"RJOW|ILS or LOC RWY11": {
+"fix": {},
+"path": [
+"BLUES",
+"R/IME/37/13",
+"ARC:IME:L",
+"KADAD",
+"TOGIL",
+"THR"
+]
+},
+"RJOW|VOR RWY11": {
+"fix": {},
+"path": [
+"BLUES",
+"R/IME/37/13",
+"ARC:IME:L",
+"ENRAB",
+"ANPEP",
+"THR"
+]
+},
+"RJOW|VOR A": {
+"fix": {},
+"path": [
+"BLUES",
+"TELOB",
+"R/IME/217/1.4"
+],
+"fc": 217
+},
+"RJOZ|TACAN RWY35": {
+"fix": {},
+"path": [
+"UGILA",
+"ARC:OCT:R",
+"BODOB",
+"IDVON",
+"THR"
+]
+},
+"RJOC|RNP RWY07": {
+"fix": {},
+"path": [
+"OKUNI",
+"OC750",
+"SUBIE",
+"ENYAH",
+"THR"
+]
+},
+"RJOS|ILS W OR LOC W RWY29": {
+"fix": {},
+"path": [
+"ENSES",
+"ARC:TSC:L",
+"IRTUG",
+"GUNVI",
+"THR"
+]
+},
+"RJOT|ILS Y or LOC Y RWY26": {
+"fix": {},
+"path": [
+"SANPO",
+"THR"
+]
+},
+"RJOT|VOR A": {
+"fix": {},
+"path": [
+"UTAZU",
+"FUCHU",
+"R/KTE/306/2.0"
+],
+"fc": 124
+},
+"RJDB|RNP RWY02": {
+"fix": {},
+"path": [
+"IKE",
+"ARUTU",
+"OMGAX",
+"MAPNI",
+"OLGAM",
+"THR"
+]
+},
+"RJDB|RNP RWY20": {
+"fix": {},
+"path": [
+"IKE",
+"ISMOK",
+"EMREK",
+"ASESU",
+"OSTUK",
+"THR"
+]
+},
+"RJDM|TACAN A": {
+"fix": {},
+"path": [
+"SGE",
+"R/MBT/217/7.1",
+"ARC:MBT:L",
+"REPOG",
+"TUTMI",
+"R/MBT/43/1.0"
+],
+"fc": 223
+},
+"RJDA|RNP X RWY13 (LP ONLY)": {
+"fix": {},
+"path": [
+"TSUJI",
+"ITUWA",
+"SAKIZ",
+"MIZKA",
+"THR"
+]
+},
+"RJDA|RNP Z RWY13": {
+"fix": {},
+"path": [
+"TSUJI",
+"ITUWA",
+"SAKIZ",
+"MIZKA",
+"THR"
+]
+},
+"RJDT|RNP RWY14": {
+"fix": {},
+"path": [
+"AGATA",
+"DT452",
+"DT451",
+"SARUI",
+"ITTOK",
+"THR"
+]
+},
+"RJDU|TACAN RWY18": {
+"fix": {},
+"path": [
+"IVSAT",
+"ARC:JBT:R",
+"RUVKA",
+"BURKO",
+"THR"
+]
+},
+"RJFA|TACAN RWY12": {
+"fix": {},
+"path": [
+"HEIWA",
+"R/AHT/50/12",
+"ARC:AHT:L",
+"R/AHT/284/12",
+"R/AHT/284/6",
+"THR"
+]
+},
+"RJFC|RNP RWY14": {
+"fix": {},
+"path": [
+"TGE",
+"SOTMA",
+"PANRI",
+"OKEMI",
+"THR"
+]
+},
+"RJFC|VOR A": {
+"fix": {},
+"path": [
+"TOLOT",
+"PUDOG",
+"R/YKE/184/1.9"
+],
+"fc": 184
+},
+"RJFE|LOC Z RWY21": {
+"fix": {},
+"path": [
+"CARCO",
+"R/FUE/82/17",
+"ARC:FUE:L",
+"R/FUE/37/11.5",
+"KAYKN",
+"KONGO",
+"THR"
+]
+},
+"RJFE|RNP RWY03": {
+"fix": {},
+"path": [
+"CARCO",
+"FE350",
+"FE351",
+"NENCH",
+"THR"
+]
+},
+"RJFE|RNP RWY21": {
+"fix": {},
+"path": [
+"CARCO",
+"FE150",
+"FE151",
+"TATAR",
+"THR"
+]
+},
+"RJFF|ILS or LOC RWY34R": {
+"fix": {},
+"path": [
+"KIGUS",
+"ADPAR",
+"ANGAG",
+"THR"
+]
+},
+"RJFF|LOC RWY34L": {
+"fix": {},
+"path": [
+"KIGUS",
+"BUBTI",
+"BEGNI",
+"THR"
+]
+},
+"RJFF|RNP RWY16R": {
+"fix": {},
+"path": [
+"ENTIX",
+"BIXAB",
+"BIVUK",
+"THR"
+]
+},
+"RJFF|RNP RWY34L": {
+"fix": {},
+"path": [
+"DAZAI",
+"BUBTI",
+"BEGNI",
+"THR"
+]
+},
+"RJFF|RNP RWY34R": {
+"fix": {},
+"path": [
+"DAZAI",
+"ADPAR",
+"AKROP",
+"THR"
+]
+},
+"RJFF|TACAN RWY16L": {
+"fix": {},
+"path": [
+"LAGER",
+"ARC:DGC:R",
+"R/DGC/172/12",
+"R/DGC/341/12",
+"R/DGC/341/6",
+"THR"
+]
+},
+"RJFG|RNP RWY 31": {
+"fix": {},
+"path": [
+"TEPPO",
+"MABIT",
+"ATSOP",
+"AROSI",
+"THR"
+]
+},
+"RJFK|VOR A": {
+"fix": {},
+"path": [
+"HKC",
+"TESAB",
+"R/KGE/228/0.5"
+],
+"fc": 48
+},
+"RJFN|ILS Z or LOC Z RWY28": {
+"fix": {},
+"path": [
+"ZARON",
+"ARC:NHT:R",
+"R/NHT/104/12",
+"R/NHT/104/5.9",
+"THR"
+]
+},
+"RJFN|TACAN Y RWY28": {
+"fix": {},
+"path": [
+"UBSOL",
+"ARC:NHT:R",
+"R/NHT/104/12",
+"AKBOX",
+"PAKMU",
+"THR"
+]
+},
+"RJFN|TACAN Z RWY28": {
+"fix": {},
+"path": [
+"ZARON",
+"ARC:NHT:R",
+"R/NHT/104/12",
+"AKBOX",
+"PAKMU",
+"THR"
+]
+},
+"RJFO|VOR A": {
+"fix": {},
+"path": [
+"JEWEL",
+"IGMAN",
+"R/TFE/218/1.7"
+],
+"fc": 218
+},
+"RJFS|VOR B": {
+"fix": {},
+"path": [
+"MILEP",
+"UGAMU",
+"OHKOK",
+"ARC:SGE:R",
+"GATAL",
+"NEKKY",
+"R/SGE/252/1.3"
+],
+"fc": 72
+},
+"RJFT|VOR A": {
+"fix": {},
+"path": [
+"MISMI",
+"ARC:KUE:R",
+"TAKAS",
+"MASAT",
+"R/KUE/297/1.0"
+],
+"fc": 117
+},
+"RJFY|ILS X or LOC X RWY 26L": {
+"fix": {},
+"path": [
+"AIRAH",
+"ARC:JAT:L",
+"R/JAT/85/16",
+"R/JAT/85/7.2",
+"THR"
+]
+},
+"RJFY|TACAN Y RWY 26L": {
+"fix": {},
+"path": [
+"AIRAH",
+"ARC:JAT:L",
+"R/JAT/80/16",
+"R/JAT/80/6",
+"THR"
+]
+},
+"RJFZ|TACAN RWY07": {
+"fix": {},
+"path": [
+"SANKO",
+"R/TQT/131/13",
+"ARC:TQT:R",
+"IPDIM",
+"ENLUG",
+"THR"
+]
+},
+"RJFZ|TACAN Z RWY25": {
+"fix": {},
+"path": [
+"SANKO",
+"ARC:TQT:L",
+"R/TQT/86/14.1",
+"R/TQT/86/10",
+"R/TQT/86/6",
+"THR"
+]
+},
+"RJKA|ILS Y or LOC Y RWY03": {
+"fix": {},
+"path": [
+"YUWAN",
+"KA360",
+"SAMAX",
+"LEDUM",
+"THR"
+]
+},
+"RJKB|VOR RWY22": {
+"fix": {},
+"path": [
+"KUNIG",
+"ARC:ONC:R",
+"FUCHA",
+"EMIKO",
+"THR"
+]
+},
+"RJKI|VOR A": {
+"fix": {},
+"path": [
+"AME",
+"SGIRA",
+"R/AME/132/12.3"
+],
+"fc": 132
+},
+"RORY|RNP RWY14": {
+"fix": {},
+"path": [
+"ASATO",
+"VEMBU",
+"GUMRI",
+"THR"
+]
+},
+"ROAH|ILS X or LOC X RWY36L": {
+"fix": {},
+"path": [
+"OLVAL",
+"ARC:NHC:L",
+"VIGER",
+"BLISS",
+"BOOST",
+"THR"
+]
+},
+"ROAH|ILS X or LOC X RWY36R": {
+"fix": {},
+"path": [
+"OLVAL",
+"ARC:NHC:L",
+"VIGER",
+"DEIJI",
+"NATON",
+"THR"
+]
+},
+"ROAH|TACAN D": {
+"fix": {},
+"path": [
+"OLVAL",
+"ARC:NHC:L",
+"VIGER",
+"ELIEE",
+"SIOTY",
+"R/NHC/196/1.5"
+],
+"fc": 16
+},
+"ROAH|VOR C": {
+"fix": {},
+"path": [
+"OLVAL",
+"ARC:NHC:L",
+"VIGER",
+"ELIEE",
+"SIOTY",
+"R/NHC/196/1.5"
+],
+"fc": 16
+},
+"RORK|VOR Y RWY03": {
+"fix": {},
+"path": [
+"CORCO",
+"R/MDE/279/7",
+"ARC:MDE:L",
+"TUBAS",
+"MDE",
+"THR"
+]
 }
 }

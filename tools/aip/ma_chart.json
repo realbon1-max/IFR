@@ -1,0 +1,386 @@
+{
+"_note": "Missed approach paths read from the AIP charts. tokens: MAP | FIX | R/NAV/rad/dme (+d = relative to previous distance) | H/hdgMAG/nm | L/lat/lon | ARC/NAV/R|L",
+"RJCC|VOR A": [
+"MAP",
+"R/MKE/339/+3",
+"MKE"
+],
+"RJCJ|VOR NR1 RWY36R": [
+"MAP",
+"R/MKE/335/+2",
+"MKE"
+],
+"RJEC|VOR A": [
+"MAP",
+"H/85/2",
+"R/AWE/40/7",
+"AWE"
+],
+"RJEC|VOR B": [
+"MAP",
+"H/85/2",
+"R/AWE/40/7",
+"AWE"
+],
+"RJEO|VOR A": [
+"MAP",
+"R/ORE/230/6",
+"ORE"
+],
+"RJSM|HI-ILS Y or LOC Y RWY10": [
+"MAP",
+"R/MIS/106/14"
+],
+"RJSM|HI-ILS Z or LOC Z RWY10": [
+"MAP",
+"R/MIS/106/14"
+],
+"RJSM|HI-VOR Y or TACAN Y RWY10": [
+"MAP",
+"R/MIS/106/14"
+],
+"RJSM|RNAV(GPS) RWY10": [
+"MAP",
+"H/103/2",
+"R/MIS/106/14"
+],
+"RJSM|HI-ILS Y or LOC Y RWY28": [
+"MAP",
+"R/MIS/280/8",
+"H/150/5",
+"SHOJU"
+],
+"RJSM|HI-VOR Y or TACAN Y RWY28": [
+"MAP",
+"R/MIS/280/8",
+"H/150/5",
+"SHOJU"
+],
+"RJSM|ILS Z or LOC Z RWY28": [
+"MAP",
+"R/MIS/280/8",
+"H/150/5",
+"SHOJU"
+],
+"RJSM|VOR Z or TACAN Z RWY28": [
+"MAP",
+"R/MIS/280/8",
+"H/150/5",
+"SHOJU"
+],
+"RJSM|RNAV(GPS) RWY28": [
+"MAP",
+"H/283/2",
+"SHOJU"
+],
+"RJSO|TACAN A": [
+"MAP",
+"BATTL"
+],
+"RJAH|TACAN A": [
+"MAP",
+"H/182/1.5",
+"TAIYO"
+],
+"RJAH|VOR B": [
+"MAP",
+"H/47/2",
+"NAKAH"
+],
+"RJTC|TACAN A": [
+"MAP",
+"ANKAL"
+],
+"RJTJ|HI-TACAN RWY 17": [
+"MAP",
+"R/YLT/50/12"
+],
+"RJTJ|HI-TACAN RWY 35": [
+"MAP",
+"R/YLT/50/12"
+],
+"RJTJ|TACAN RWY 17": [
+"MAP",
+"R/YLT/50/12"
+],
+"RJTJ|TACAN RWY 35": [
+"MAP",
+"R/YLT/50/12"
+],
+"RJTK|TACAN RWY02": [
+"MAP",
+"KRURI"
+],
+"RJTQ|VOR A": [
+"MAP",
+"RASYA"
+],
+"RJTQ|VOR B": [
+"MAP",
+"RASYA"
+],
+"RJTT|LDA W RWY23": [
+"MAP",
+"R/TTE/178/+4",
+"UTIBO"
+],
+"RJTT|LOC RWY22": [
+"MAP",
+"R/TTE/15/+4",
+"KASGA"
+],
+"RJTT|LOC Y RWY34R": [
+"MAP",
+"R/TTE/91/14.8"
+],
+"RJTT|RNP RWY16L": [
+"MAP",
+"SNOKE"
+],
+"RJTY|HI-ILS Y or LOC Y RWY18": [
+"MAP",
+"R/YOK/178/18"
+],
+"RJTY|ILS Z or LOC Z RWY18": [
+"MAP",
+"R/YOK/178/18"
+],
+"RJTY|RNAV(GPS) RWY18": [
+"MAP",
+"MESTR"
+],
+"RJTY|HI-ILS Y or LOC Y RWY36": [
+"MAP",
+"R/YOK/3/18"
+],
+"RJTY|ILS Z or LOC Z RWY36": [
+"MAP",
+"R/YOK/3/18"
+],
+"RJTY|RNAV(GPS) RWY36": [
+"MAP",
+"BODAI"
+],
+"RJNA|RNP RWY16": [
+"MAP",
+"L/35.19204/136.83164",
+"KCC"
+],
+"RJNA|TACAN A": [
+"MAP",
+"R/KCC/131/15",
+"ARC/KCC/L",
+"R/KCC/91/15",
+"SHATI"
+],
+"RJNA|VOR A": [
+"MAP",
+"H/275/1",
+"R/KCC/230/6",
+"KCC"
+],
+"RJNG|TACAN RWY28": [
+"MAP",
+"H/275/2",
+"R/GFT/31/13",
+"ARC/GFT/L",
+"MEIHO"
+],
+"RJNK|TACAN A": [
+"MAP",
+"GOZEN"
+],
+"RJNT|LOC Y RWY 20": [
+"MAP",
+"H/336/3",
+"R/TOE/21/11.4"
+],
+"RJNT|VOR A": [
+"MAP",
+"H/355/2",
+"R/TOE/40/+3",
+"TOE"
+],
+"RJNY|VOR A": [
+"MAP",
+"SZE"
+],
+"RJBB|ILS Z or LOC Z RWY06R (CAT II)": [
+"MAP",
+"L/34.49506/135.34519",
+"L/34.54181/135.36694",
+"L/34.60331/135.36894",
+"L/34.61103/134.99697",
+"L/34.61428/134.83542"
+],
+"RJOY|VOR B": [
+"MAP",
+"R/YOE/49/+2",
+"H/184/3",
+"IZUMI"
+],
+"RJOC|RNP RWY25": [
+"MAP",
+"H/250/2",
+"XZE"
+],
+"RJOF|TACAN": [
+"MAP",
+"NANYO"
+],
+"RJOH|TACAN A": [
+"MAP",
+"H/36/2",
+"MINAT"
+],
+"RJOI|ILS or LOC RWY02": [
+"MAP",
+"H/14/2",
+"MYE"
+],
+"RJOI|RNAV (GPS) RWY02": [
+"MAP",
+"H/15/2",
+"MYE"
+],
+"RJOW|VOR A": [
+"MAP",
+"BLUES"
+],
+"RJOW|VOR RWY11": [
+"MAP",
+"BLUES"
+],
+"RJOS|TACAN A": [
+"MAP",
+"H/295/2",
+"R/TSC/160/20",
+"ARC/TSC/L",
+"ENSES"
+],
+"RJOT|VOR A": [
+"MAP",
+"R/KTE/65/6",
+"KTE"
+],
+"RJDM|TACAN A": [
+"MAP",
+"REPOG"
+],
+"RJFA|TACAN RWY12": [
+"MAP",
+"HEIWA"
+],
+"RJFK|VOR A": [
+"MAP",
+"R/KGE/348/7",
+"KGE"
+],
+"RJFO|VOR A": [
+"MAP",
+"R/TFE/218/1.1",
+"H/46/3",
+"R/TFE/91/13",
+"ARC/TFE/L",
+"R/TFE/38/13",
+"JEWEL"
+],
+"RJFR|VOR A": [
+"MAP",
+"ASARI"
+],
+"RJFR|VOR B": [
+"MAP",
+"ASARI"
+],
+"RJFS|VOR C": [
+"MAP",
+"R/SGE/194/6",
+"SGE"
+],
+"RJKB|RNP RWY04": [
+"MAP",
+"L/27.46808/128.76106",
+"L/27.27117/128.69878"
+],
+"RJKI|RNP RWY07": [
+"MAP",
+"KADON"
+],
+"RJKI|RNP Y RWY25 (LPV only)": [
+"MAP",
+"TENES"
+],
+"RJKI|RNP Z RWY25": [
+"MAP",
+"BANTA"
+],
+"RJKN|RNP Z RWY 01": [
+"MAP",
+"SHODA"
+],
+"ROAH|VOR A or TACAN B": [
+"MAP",
+"R/NHC/182/15",
+"ARC/NHC/R",
+"OLVAL"
+],
+"RODN|ILS or LOC RWY05L": [
+"MAP",
+"IMONO"
+],
+"RODN|VOR or TACAN RWY05L": [
+"MAP",
+"IMONO"
+],
+"RODN|VOR or TACAN RWY05R": [
+"MAP",
+"IMONO"
+],
+"RODN|ILS or LOC RWY23R": [
+"MAP",
+"R/KAD/236/4.9",
+"IDMEK"
+],
+"RODN|RNAV (GPS) RWY05L": [
+"MAP",
+"BYYRD"
+],
+"RODN|RNAV (GPS) RWY05R": [
+"MAP",
+"BYYRD"
+],
+"RODN|RNAV (GPS) RWY23L": [
+"MAP",
+"ADYEK"
+],
+"RODN|RNAV (GPS) RWY23R": [
+"MAP",
+"ADYEK"
+],
+"RORK|RNP RWY03": [
+"MAP",
+"MDE"
+],
+"RORT|RNP RWY18": [
+"MAP",
+"L/24.61076/124.68143",
+"L/24.62269/124.85417"
+],
+"RORT|RNP RWY36": [
+"MAP",
+"L/24.69686/124.66951",
+"L/24.62269/124.85417"
+],
+"ROYN|LOC RWY26": [
+"MAP",
+"R/YNE/46/10",
+"ARC/YNE/R",
+"R/YNE/101/10",
+"ABASA"
+],
+"RJOI|RNAV (RNP) Z RWY20": [
+"MAP",
+"PPOPS"
+]
+}

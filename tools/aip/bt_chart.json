@@ -911,5 +911,17 @@
 8.0,
 241,
 38
+],
+"RJSA|ILS Y or LOC Y RWY24 (CAT II and III)": [
+"MRE",
+12.0,
+45,
+241
+],
+"RJSF|VOR RWY19": [
+"FKE",
+10.0,
+11,
+175
 ]
 }
