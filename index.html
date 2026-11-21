@@ -1036,6 +1036,14 @@ header.top>.row{flex:0 0 auto}
 nav.steps.fr{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent)}
 nav.steps.fl{-webkit-mask-image:linear-gradient(90deg,transparent,#000 36px);mask-image:linear-gradient(90deg,transparent,#000 36px)}
 nav.steps.fl.fr{-webkit-mask-image:linear-gradient(90deg,transparent,#000 36px,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,transparent,#000 36px,#000 calc(100% - 36px),transparent)}
+/* サブタブ：横幅いっぱいに広げ、アイコンを大きく */
+html[data-theme] nav.steps button{flex:1 1 0;min-width:76px;justify-content:center}
+html[data-theme] nav.steps button svg.ic{width:30px;height:30px}
+html[data-theme="simple"] nav.steps button{font-size:14px;padding:10px 8px 9px;gap:5px}
+html[data-theme] nav.steps:not(.single){gap:6px}
+nav.groups button svg.ic{width:22px;height:22px}nav.groups button{font-size:16px}
+@media (max-width:600px){nav.groups button svg.ic{width:20px;height:20px}nav.groups button{font-size:13px}}
+@media (max-width:600px){html[data-theme] nav.steps button{min-width:62px}html[data-theme] nav.steps button svg.ic{width:26px;height:26px}html[data-theme="simple"] nav.steps button{font-size:12px;padding:8px 4px 7px}}
 @media (max-width:640px){
   /* ヘッダーを1段に */
   header.top{flex-wrap:nowrap!important;align-items:center;gap:8px}
@@ -4045,7 +4053,7 @@ function airacCheck(){const today=new Date().toISOString().slice(0,10);
 load();bind();navInit();airacCheck();show(S.tab||(S.route.dep&&S.route.dst?'sum':'route'));renderAll();try{decoHeadings();let _dh=0;new MutationObserver(()=>{if(_dh)return;_dh=requestAnimationFrame(()=>{_dh=0;decoHeadings()})}).observe(document.body,{childList:true,subtree:true})}catch(e){}if(S.wxPoll)wxPollSet(1);
 </script>
 <script>
-window.APPV='20261121150258';
+window.APPV='20261121061829';
 (function(){const a=document.querySelector('.airac');if(a){const s=document.createElement('span');s.className='appv';const v=window.APPV;s.textContent=' · アプリ版 '+v.slice(4,6)+'/'+v.slice(6,8)+' '+v.slice(8,10)+':'+v.slice(10,12);a.appendChild(s)}})();
 if('serviceWorker' in navigator&&window.isSecureContext){const had=!!navigator.serviceWorker.controller;
   navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!window.__swr){window.__swr=1;location.reload()}});
